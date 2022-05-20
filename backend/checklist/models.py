@@ -3,4 +3,4 @@ from trips.models import Trip
 
 class Checklist(models.Model):
     name = models.CharField(max_length=25)
-    trip = models.ForeignKey(Trip, on_delete=models.PROTECT)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
