@@ -10,11 +10,9 @@ from django.shortcuts import get_object_or_404
 @api_view(['GET'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def get_checklists(request):
-    trip_id = request.query_params.get("trip")
    
     if request.method == "GET":
         query_set = Checklist.objects.all()
         
         serializer = ChecklistSerializer(query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
