@@ -2,8 +2,9 @@ from asyncore import write
 from rest_framework import serializers
 from .models import LuggageItem
 
-class LuggageItemSerializer(serializers.Serializer):
+class LuggageItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = LuggageItem
-        field = ['id','name','packed', 'luggage','luggage_id']
+        fields = ['id','name','packed', 'luggage','luggage_id']
+        depth = 1
     luggage_id= serializers.IntegerField(write_only=True)

@@ -1,8 +1,10 @@
+from asyncore import write
 from rest_framework import serializers
 from .models import Motorcycle
 
 class MotorcycleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Motorcycle
-        field = ['id', 'make','model','year','name', 'user']
-        depth = 1
+        fields = ['id', 'make','model','year','user','user_id']
+        
+    user_id =serializers.IntegerField(write_only=True)

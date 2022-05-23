@@ -4,5 +4,5 @@ from .models import Trip
 class TripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
-        field = ['id', 'user', 'description', 'name']
+        fields = ['id', 'user', 'description', 'name']
         

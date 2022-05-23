@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from .models import Stop
 
-class StopSerializer(serializers.Serializer):
+class StopSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Stop
-        field= ['id', 'name', 'description', 'latitude', 'longitude', 'start','end', 'trip','trip_id']
+        fields= ['id', 'name', 'description', 'latitude', 'longitude', 'start','end', 'trip','trip_id']
+        depth = 1
     trip_id = serializers.IntegerField(write_only=True)

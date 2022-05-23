@@ -38,17 +38,3 @@ def get_checklists(request):
         query_set = get_object_or_404(Checklist, id =list)
         query_set.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
-
-
-
-# @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
-# def edit_checklist(request,list):
-    # if request.method == 'PUT':
-    #     query_set = ChecklistSerializer(Checklist, id = list)
-    #     serializer = ChecklistSerializer(query_set, data=request.data,partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
