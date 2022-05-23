@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/checklist/', include('checklist.urls')),
     path('api/trip/', include('trips.urls')),
     path('api/list-item/', include('checklist_item.urls')),
+    path('api/luggage/', include('luggage.urls'))
 ]
