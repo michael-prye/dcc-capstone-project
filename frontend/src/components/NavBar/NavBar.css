@@ -33,3 +33,7 @@ li {
   cursor: pointer;
   font-size: 2rem;
 }
+.custom-row{
+  display: flex;
+  justify-content: space-between;
+}
