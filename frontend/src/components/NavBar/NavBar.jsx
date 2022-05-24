@@ -10,6 +10,8 @@ import { Drawer, Box, ListItem, List, ListItemButton, ListItemText } from '@mui/
 
 
 
+
+
 const Navbar = (props) => {
 
   const { logoutUser, user,token } = useContext(AuthContext);
@@ -41,7 +43,7 @@ const Navbar = (props) => {
                   <>
                   {props.trips.map((trip)=>{
                     return(
-                      <ListItemButton>
+                      <ListItemButton onClick={() =>navigate(`/trip?t=${trip.id}`)}>
                       <ListItemText primary={trip.name}/>
                       </ListItemButton>
                     )

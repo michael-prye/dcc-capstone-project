@@ -5,6 +5,6 @@ from .models import Motorcycle
 class MotorcycleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Motorcycle
-        fields = ['id', 'make','model','year','user','user_id']
+        fields = ['id', 'make','model','year','user']
+        depth = 1
         
-    user_id =serializers.IntegerField(write_only=True)

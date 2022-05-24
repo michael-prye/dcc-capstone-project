@@ -19,11 +19,10 @@ def get_motorcycle(request):
             "make": request.data['make'],
             "model": request.data['model'],
             "year": request.data['year'],
-            "user_id": request.user.id
         }
         serializer = MotorcycleSerializer(data=motorcycle)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'PUT':
