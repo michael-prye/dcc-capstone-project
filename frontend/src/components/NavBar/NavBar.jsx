@@ -6,12 +6,6 @@ import AuthContext from "../../context/AuthContext";
 import "./NavBar.css";
 import { Drawer, Box, ListItem, List, ListItemButton, ListItemText } from '@mui/material';
 
-
-
-
-
-
-
 const Navbar = (props) => {
 
   const { logoutUser, user,token } = useContext(AuthContext);
@@ -20,9 +14,7 @@ const Navbar = (props) => {
  
   function handleClick(){
     setIsDrawerOpen(true)
-    props.trips.map((trip)=>{
-      console.log(trip.name)
-    })
+  
   }
 
   return (

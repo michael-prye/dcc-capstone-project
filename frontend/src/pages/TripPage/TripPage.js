@@ -1,24 +1,20 @@
-import React, {Component, useEffect, useState } from 'react';
+import React, {Component, useEffect, useState, useContext } from 'react';
 import { Autocomplete, GoogleMap, LoadScript,  } from '@react-google-maps/api';
-import { googleMapsApiKey } from '../../localKey';
-
-//40.046649191309385, -84.18169640973143
-
-
+import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
+import './TripPage.css'
+import { Col, Container, Row } from 'react-bootstrap';
+import StopsTable from '../../components/StopsTable/StopsTable';
 
 const TripPage = () => {
 
-    const containerStyle = {
-        width: '400px',
-        height: '400px'
-      };
-      
-      const center = {
-        lat: 40.0379325481874,
-        lng: -84.21688854124567 
-      };
+    const [searchParams] = useSearchParams();
+    const tripId = searchParams.get('t')
+    const { user,token } = useContext(AuthContext);
+    const [trip, setTrip] = useState();
+    const [stops, setStops] = useState([]);
 
-      const [marker, setMarker] = useState({lat: 40.046649191309385,lng: -84.18169640973143})
     class MyMapWithAutocomplete extends Component{
         constructor (props){
             super(props)
@@ -41,9 +37,70 @@ const TripPage = () => {
     var testMap = new MyMapWithAutocomplete();
 
 
+    useEffect(()=>{
+        getTrip();
+        getStops();
+        //console.log('TRIP: ',trip.name)
+    },[])
+
+    async function getTrip(){
+        let response = await axios.
+        get(`http://127.0.0.1:8000/api/trip/?id=${tripId}`,
+        {
+            headers:{
+                Authorization: "Bearer " + token,
+            },
+        }).then((response)=>{
+            console.log('TRIPS response data: ',response.data)
+            setTrip(response.data)
+            
+        }).catch((error)=>{
+            console.log('ERROR: ',error)
+        });}
+    async function getStops(){
+        let response = await axios.get(`http://127.0.0.1:8000/api/stop/`,
+        {
+            headers:{
+                Authorization: "Bearer " + token,
+            },
+        }).then((response)=>{
+            console.log('STOPS response data: ',response.data)
+            setStops(response.data)
+            
+        }).catch((error)=>{
+            console.log('ERROR: ',error)
+        });}
+    
+
     return ( 
         <div>
-            <LoadScript
+        <section>
+            {trip  &&(
+                <section>
+                <h3>{trip[0].name}</h3>
+                <h6>{trip[0].description}</h6>
+                </section>
+            )}
+        </section>
+        <section className='temp-map-box'>
+            <>
+            </>
+        </section>
+        <StopsTable stops={stops}/>
+        </div>
+     );
+}
+ 
+export default TripPage;
+
+
+
+
+
+
+// libraries="places"
+
+{/* <LoadScript
         googleMapsApiKey= {googleMapsApiKey}
         libraries={["places"]}
         >
@@ -73,19 +130,4 @@ const TripPage = () => {
                 />
             </Autocomplete>
         
-      </LoadScript>
-        <p>This is my TRIP</p>
-        <p>{marker.lat}</p>
-        <p>{marker.lng}</p>
-        </div>
-     );
-}
- 
-export default TripPage;
-
-
-
-
-
-
-// libraries="places"
+      </LoadScript> */}
