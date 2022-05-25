@@ -7,5 +7,6 @@ class Stop(models.Model):
     description = models.CharField(max_length=255)
     latitude = models.IntegerField()
     longitude = models.IntegerField()
+    day = models.IntegerField()
     start = models.BooleanField(default=False)
     end = models.BooleanField(default=False)

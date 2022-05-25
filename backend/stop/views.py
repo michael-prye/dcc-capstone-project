@@ -20,6 +20,7 @@ def get_stop(request):
             "name": request.data['name'],
             "description": request.data['description'],
             "latitude": request.data['latitude'],
+            "day": request.data['day'],
             "longitude": request.data['longitude'],
             "trip_id": trip_id
         }
