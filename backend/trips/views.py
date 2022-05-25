@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -11,7 +12,10 @@ from django.shortcuts import get_object_or_404
 def get_trip(request):
     trip_id = request.query_params.get('id')
     if request.method == "GET":
-        query_set = Trip.objects.all()
+        if trip_id != None:
+            query_set = Trip.objects.filter(id =trip_id)
+        else:
+            query_set = Trip.objects.all()      
         serializer = TripSerializer(query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':

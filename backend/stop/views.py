@@ -12,7 +12,7 @@ def get_stop(request):
     stop_id = request.query_params.get('id')
     trip_id = request.query_params.get('trip')
     if request.method == "GET":
-        query_set = Stop.objects.all()
+        query_set = Stop.objects.all().order_by('day')
         serializer = StopSerializer(query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':

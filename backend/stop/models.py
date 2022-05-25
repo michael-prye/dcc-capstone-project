@@ -10,3 +10,4 @@ class Stop(models.Model):
     day = models.IntegerField()
     start = models.BooleanField(default=False)
     end = models.BooleanField(default=False)
+    address = models.CharField(max_length=255)
