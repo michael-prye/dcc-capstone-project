@@ -41,10 +41,10 @@ const Navbar = (props) => {
                 <List>
                 {props.trips && (
                   <>
-                  {props.trips.map((trip)=>{
+                  {props.trips.map((trip, key)=>{
                     return(
                       <ListItemButton onClick={() =>navigate(`/trip?t=${trip.id}`)}>
-                      <ListItemText primary={trip.name}/>
+                      <ListItemText primary={`   ${trip.name}`}/>
                       </ListItemButton>
                     )
                   })}
