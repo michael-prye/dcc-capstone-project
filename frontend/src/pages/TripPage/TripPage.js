@@ -5,14 +5,14 @@ import { useSearchParams } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import './TripPage.css'
 import { Col, Container, Row } from 'react-bootstrap';
-import StopsTable from '../../components/StopsTable/StopsTable';
+import StopDetails from '../../components/StopDetails/StopDetails';
 
 const TripPage = () => {
 
     const [searchParams] = useSearchParams();
     const tripId = searchParams.get('t')
     const { user,token } = useContext(AuthContext);
-    const [trip, setTrip] = useState();
+    const [trip, setTrip] = useState([]);
     const [stops, setStops] = useState([]);
 
     class MyMapWithAutocomplete extends Component{
@@ -75,7 +75,7 @@ const TripPage = () => {
     return ( 
         <div>
         <section>
-            {trip  &&(
+            {trip[0]  &&(
                 <section>
                 <h3>{trip[0].name}</h3>
                 <h6>{trip[0].description}</h6>
@@ -86,7 +86,9 @@ const TripPage = () => {
             <>
             </>
         </section>
-        <StopsTable stops={stops}/>
+        {stops.map((stop, index)=>{
+            return(<StopDetails stop={stop}index ={index}/>)
+        })}
         </div>
      );
 }

@@ -5,6 +5,7 @@ import GetMotorcycleForm from '../../components/GetMotorcycleForm/GetMotorcycleF
 import MotorcycleCard from '../../components/MotorcycleCard/MotorcycleCard';
 import useAuth from '../../hooks/useAuth';
 import './ProfilePage.css'
+import CreateTripForm from '../../components/CreateTripForm/CreateTripForm';
 
 
 
@@ -50,6 +51,7 @@ const ProfilePage = () => {
             </Container>
             
             <GetMotorcycleForm getMotorcycles={getMotorcycles}/>
+            <CreateTripForm/>
             </div>
 
            
