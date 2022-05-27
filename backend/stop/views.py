@@ -17,12 +17,11 @@ def get_stop(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':
         stop = {
-            "name": request.data['name'],
-            "description": request.data['description'],
-            "latitude": request.data['latitude'],
+            "lat": request.data['lat'],
             "day": request.data['day'],
-            "longitude": request.data['longitude'],
-            "trip_id": trip_id
+            "lng": request.data['lng'],
+            "trip_id": trip_id,
+            "address": request.data['address']
         }
         serializer = StopSerializer(data=stop)
         if serializer.is_valid():
