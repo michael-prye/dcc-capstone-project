@@ -15,7 +15,8 @@ const CreateTripForm = (props) => {
     const [autocompleteEnd, setAutocompleteEnd] = useState(null);
     const [tripName, setTripName] = useState('')
     const [tripDescription, setTripDescription] = useState('')
-    const [tripId, setTripId] = useState();
+    
+    
 
 
     function handleSubmit(e){
@@ -49,65 +50,88 @@ const CreateTripForm = (props) => {
             console.log('Autocomplete is not loaded yet!')
         }}
 
-    async function addStop(data, id,start,){
-        if (start === 'start'){
-            
-            await axios.post(`http://127.0.0.1:8000/api/stop/?trip=${id}`,
+    async function createTrip(){
+        let response = await axios.post(
+            `http://127.0.0.1:8000/api/trip/`,
             {
-                address: data.address,
-                lat: data.lat,
-                lng: data.lng,
+              name: tripName,
+              description: tripDescription,
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+          );
+      
+          try {
+            await axios.post(
+              `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
+              {
+                address: start.address,
+                lat: start.lat,
+                lng: start.lng,
                 day: 1,
                 start: true,
                 end: false,
-            },{
-                headers:{
+              },
+              {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              }
+            );
+          } catch (e) {
+            console.log(e.response.data);
+          }
+          try {
+              
+            await axios
+              .post(
+                `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
+                {
+                  address: end.address,
+                  lat: end.lat,
+                  lng: end.lng,
+                  day: 1,
+                  start: false,
+                  end: true,
+                },
+                {
+                  headers: {
                     Authorization: "Bearer " + token,
+                  },
                 }
-            }).then((response)=>{
-                console.log('add starting stop')
-                console.log(response.data)
-            })
-        }
-        else{
-            
-            await axios.post(`http://127.0.0.1:8000/api/stop/?trip=${id}`,
-            {
-                address: data.address,
-                lat: data.lat,
-                lng: data.lng,
-                day: 1,
-                start: false,
-                end: true,
-            },{
-                headers:{
-                    Authorization: "Bearer " + token,
-                }
-            }).then((response)=>{
-                console.log('add end stop')
-                console.log(response.data)
-            })}}
+              )
+              .then((response) => {
+                console.log("add end stop");
+                console.log(response.data);
+              });
+          } catch (e) {
+            console.log(e.response.data);
+          }
+          try{
 
-
-    async function createTrip(){
-        
-        let response =await axios.post(`http://127.0.0.1:8000/api/trip/`,
+            await axios.post(`http://127.0.0.1:8000/api/checklist/?trip=${response.data.id}`,
         {
-            name: tripName,
-            description: tripDescription
-        },{
-            headers:{
+            name: 'My Checklist'
+        },
+        {
+            headers: {
                 Authorization: "Bearer " + token,
-            }
-        }).then((response)=>{
-            setTripId(response.data.id)
-            console.log('create trip')
-        })}
+              },
+        }).then((response) =>{
+            console.log('checklist data: ', response.data)
+        })
+          }
+          catch (e) {
+            console.log(e.response.data);
+          }
+
+        }
      
     function handleSave(e){
         createTrip();
-        addStop(start,tripId,'start') // creating starting stop for the new trip
-        addStop(end,tripId,'end') // creating end stop for the new trip
         e.preventDefault();
         }
     

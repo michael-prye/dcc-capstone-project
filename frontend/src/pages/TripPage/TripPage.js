@@ -6,6 +6,9 @@ import AuthContext from '../../context/AuthContext';
 import './TripPage.css'
 import { Col, Container, Row } from 'react-bootstrap';
 import StopDetails from '../../components/StopDetails/StopDetails';
+import MapDirections from '../../components/MapDirections/MapDirections';
+import Checklist from '../../components/Checklist/Checklist';
+import Luggage from '../../components/Luggage/Luggage';
 
 const TripPage = () => {
 
@@ -14,27 +17,8 @@ const TripPage = () => {
     const { user,token } = useContext(AuthContext);
     const [trip, setTrip] = useState([]);
     const [stops, setStops] = useState([]);
+    const [detialChoice, setDetialChoice] = useState('map');
 
-    class MyMapWithAutocomplete extends Component{
-        constructor (props){
-            super(props)
-            this.autocomplete = null
-            this.onLoad = this.onLoad.bind(this)
-            this.onPlaceChanged = this.onPlaceChanged.bind(this)
-        }
-        onLoad(autocomplete){
-            console.log('Autocomplete: ', autocomplete)
-            this.autocomplete = autocomplete
-        }
-        onPlaceChanged(){
-            if (this.autocomplete !== null){
-                console.log(this.autocomplete.getPlace())
-            }else{
-                console.log('Autocomplete is not loaded yet!')
-            }
-        }
-    };
-    var testMap = new MyMapWithAutocomplete();
 
 
     useEffect(()=>{
@@ -70,66 +54,59 @@ const TripPage = () => {
         }).catch((error)=>{
             console.log('ERROR: ',error)
         });}
+
+        let tripDetails;
+        switch (detialChoice){
+            case 'checklist':
+                tripDetails = <Checklist tripId = {trip[0].id}/>
+                break;
+            case 'map':
+                tripDetails = <MapDirections stops={stops}/>
+                break;
+            case 'luggage':
+                tripDetails = <Luggage tripId = {trip[0].id}/>
+                break;
+            default:
+                console.log('Not a valid choice');
+        }
     
 
     return ( 
         <div>
-        <section>
+        <Container>
+            <Row>
             {trip[0]  &&(
-                <section>
+                <div>
                 <h3>{trip[0].name}</h3>
                 <h6>{trip[0].description}</h6>
-                </section>
+                </div>                
             )}
-        </section>
-        <section className='temp-map-box'>
-            <>
-            </>
-        </section>
-        {stops.map((stop, index)=>{
-            return(<StopDetails stop={stop}index ={index}/>)
-        })}
+            </Row>
+        <Row>
+            <button className={
+                detialChoice=== 'checklist' ? 'tab--active':'tab--inactive'            }
+            onClick={()=> setDetialChoice('checklist')}>
+                Checklist
+            </button>
+            <button className={
+                detialChoice === 'map' ? 'tab--active':'tab--inactive'}
+                onClick={()=>setDetialChoice('map')}>
+                    Map
+                </button>
+            <button className={
+                detialChoice === 'luggage' ? 'tab--active':'tab--inactive'}
+                onClick={()=>setDetialChoice('luggage')}>
+                    luggage
+                </button>
+        </Row>
+        <Row>
+        {tripDetails}
+        </Row>
+        
+        
+        </Container>
         </div>
      );
 }
  
 export default TripPage;
-
-
-
-
-
-
-// libraries="places"
-
-{/* <LoadScript
-        googleMapsApiKey= {googleMapsApiKey}
-        libraries={["places"]}
-        >
-        
-            <Autocomplete
-            onLoad={testMap.onLoad}
-            onPlaceChanged={testMap.onPlaceChanged}
-            restrictions={['us']}>
-                <input
-                type='text'
-                placeholder='search'
-                style={{
-                    boxSizing: `border-box`,
-                    border: `1px solid transparent`,
-                    width: `240px`,
-                    height: `32px`,
-                    padding: `0 12px`,
-                    borderRadius: `3px`,
-                    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                    fontSize: `14px`,
-                    outline: `none`,
-                    textOverflow: `ellipses`,
-                    position: "absolute",
-                    left: "50%",
-                    marginLeft: "-120px"
-                  }}
-                />
-            </Autocomplete>
-        
-      </LoadScript> */}
