@@ -13,7 +13,10 @@ def get_luggage_items(request):
     luggage_id = request.query_params.get('luggage')
     item_id = request.query_params.get('item')
     if request.method == 'GET':
-        query_set = LuggageItem.objects.all()
+        if luggage_id != None:
+            query_set = LuggageItem.objects.filter(luggage_id=luggage_id)
+        else:
+            query_set = LuggageItem.objects.all()
         serializer = LuggageItemSerializer(query_set, many =True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':

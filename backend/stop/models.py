@@ -3,8 +3,8 @@ from trips.models import Trip
 
 class Stop(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
-    lat = models.DecimalField(max_digits=15, decimal_places=8)
-    lng = models.DecimalField(max_digits=15, decimal_places=8)
+    lat = models.DecimalField(max_digits=30, decimal_places=15)
+    lng = models.DecimalField(max_digits=30, decimal_places=15)
     day = models.IntegerField()
     start = models.BooleanField(default=False)
     end = models.BooleanField(default=False)

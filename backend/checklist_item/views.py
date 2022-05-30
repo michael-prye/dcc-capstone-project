@@ -15,7 +15,10 @@ def get_checklist_item(request):
     checklist = request.query_params.get('list')
     item_id = request.query_params.get('item')
     if request.method == 'GET':
-        query_set = ChecklistItem.objects.all()
+        if checklist != None:
+            query_set = ChecklistItem.objects.filter(checklist_id = checklist)
+        else:
+            query_set = ChecklistItem.objects.all()
         serializer = ChecklistItemSerializer(query_set, many =True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':

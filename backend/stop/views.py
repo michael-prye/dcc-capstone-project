@@ -21,8 +21,11 @@ def get_stop(request):
             "day": request.data['day'],
             "lng": request.data['lng'],
             "trip_id": trip_id,
-            "address": request.data['address']
-        }
+            "address": request.data['address'],
+            "start": request.data['start'],
+            "end": request.data['end'],
+        }   
+        
         serializer = StopSerializer(data=stop)
         if serializer.is_valid():
             serializer.save()
