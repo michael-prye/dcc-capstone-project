@@ -1,11 +1,13 @@
 import { Col, Container, Row } from "react-bootstrap";
-import AddStopForm from "../AddStopForm/AddStopForm";
 import { useState } from "react";
 import "./StopDetails.css"
+import AddStopForm from "../AddStopForm/AddStopForm";
 
 
 const StopDetails = (props) => {
     const [toggleAdd, setToggleAdd] = useState(false);
+    const [waypts, setWaypts] = useState([]);
+    const [addButton, setAddButton]=useState(false)
 
 
     function handleAdd(){
@@ -32,9 +34,14 @@ const StopDetails = (props) => {
                 )}
             </Row>
             <Row>
-                <Col><button onClick={handleAdd}>ADD</button></Col>
-                {toggleAdd === true &&
-                <AddStopForm id = {props.stop.id}/>}
+                {props.stop.end !== true &&
+                    <div>
+                    <button onClick={()=>setAddButton(true)}>ADD</button>
+                    {addButton=== true &&
+                    <AddStopForm day = {props.stop.day} waypts={waypts} setWaypts={setWaypts}/> }
+                    </div>
+                    
+                }
             </Row>
         </Container>
 

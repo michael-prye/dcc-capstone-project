@@ -16,15 +16,12 @@ const TripPage = () => {
     const tripId = searchParams.get('t')
     const { user,token } = useContext(AuthContext);
     const [trip, setTrip] = useState([]);
-    const [stops, setStops] = useState([]);
     const [detialChoice, setDetialChoice] = useState('map');
 
 
 
     useEffect(()=>{
         getTrip();
-        getStops();
-        //console.log('TRIP: ',trip.name)
     },[])
 
     async function getTrip(){
@@ -41,19 +38,7 @@ const TripPage = () => {
         }).catch((error)=>{
             console.log('ERROR: ',error)
         });}
-    async function getStops(){
-        let response = await axios.get(`http://127.0.0.1:8000/api/stop/`,
-        {
-            headers:{
-                Authorization: "Bearer " + token,
-            },
-        }).then((response)=>{
-            console.log('STOPS response data: ',response.data)
-            setStops(response.data)
-            
-        }).catch((error)=>{
-            console.log('ERROR: ',error)
-        });}
+    
 
         let tripDetails;
         switch (detialChoice){
@@ -61,7 +46,7 @@ const TripPage = () => {
                 tripDetails = <Checklist tripId = {trip[0].id}/>
                 break;
             case 'map':
-                tripDetails = <MapDirections stops={stops}/>
+                tripDetails = <MapDirections/>
                 break;
             case 'luggage':
                 tripDetails = <Luggage tripId = {trip[0].id}/>

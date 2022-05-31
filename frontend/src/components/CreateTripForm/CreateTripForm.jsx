@@ -61,57 +61,8 @@ const CreateTripForm = (props) => {
               headers: {
                 Authorization: "Bearer " + token,
               },
-            }
-          );
-      
-          try {
-            await axios.post(
-              `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
-              {
-                address: start.address,
-                lat: start.lat,
-                lng: start.lng,
-                day: 1,
-                start: true,
-                end: false,
-              },
-              {
-                headers: {
-                  Authorization: "Bearer " + token,
-                },
-              }
-            );
-          } catch (e) {
-            console.log(e.response.data);
-          }
-          try {
-              
-            await axios
-              .post(
-                `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
-                {
-                  address: end.address,
-                  lat: end.lat,
-                  lng: end.lng,
-                  day: 1,
-                  start: false,
-                  end: true,
-                },
-                {
-                  headers: {
-                    Authorization: "Bearer " + token,
-                  },
-                }
-              )
-              .then((response) => {
-                console.log("add end stop");
-                console.log(response.data);
-              });
-          } catch (e) {
-            console.log(e.response.data);
-          }
+            });
           try{
-
             await axios.post(`http://127.0.0.1:8000/api/checklist/?trip=${response.data.id}`,
         {
             name: 'My Checklist'
@@ -120,24 +71,16 @@ const CreateTripForm = (props) => {
             headers: {
                 Authorization: "Bearer " + token,
               },
-        }).then((response) =>{
-            console.log('checklist data: ', response.data)
-        })
-          }
+        })}
           catch (e) {
             console.log(e.response.data);
-          }
-
-        }
+          }}
      
     function handleSave(e){
         createTrip();
         e.preventDefault();
         }
     
-
-
-
     return ( 
         <div>
         <form>
@@ -151,34 +94,7 @@ const CreateTripForm = (props) => {
         placeholder='description'
         value={tripDescription}
         onChange={(e)=> setTripDescription(e.target.value)}/>
-        <LoadScript
-        googleMapsApiKey= {googleMapsApiKey}
-        libraries={library}>
-            <Autocomplete
-            onLoad={onLoad}
-            onPlaceChanged={onPlaceChangedStart}
-            restrictions = {restrictions}            >
-                <input
-                type='text'
-                placeholder='Starting Point'
-                />
-            </Autocomplete>
-            <Autocomplete
-            onLoad={onLoadTest}
-            onPlaceChanged={onPlaceChangedEnd}
-            restrictions = {restrictions}            >
-                <input
-                type='text'
-                placeholder='End Point'
-                />
-            </Autocomplete>
-        </LoadScript>
-        <li>{start.address}</li>
-        <li>{start.lat}</li>
-        <li>{start.lng}</li>
-        <li>{end.address}</li>
-        <li>{end.lat}</li>
-        <li>{end.lng}</li>
+
       <button onClick={handleSave}>CREATE TRIP</button>
       </form>
       </div>
@@ -188,31 +104,72 @@ const CreateTripForm = (props) => {
  
 export default CreateTripForm;
 
+{/* <LoadScript
+googleMapsApiKey= {googleMapsApiKey}
+libraries={library}>
+    <Autocomplete
+    onLoad={onLoad}
+    onPlaceChanged={onPlaceChangedStart}
+    restrictions = {restrictions}            >
+        <input
+        type='text'
+        placeholder='Starting Point'
+        />
+    </Autocomplete>
+    <Autocomplete
+    onLoad={onLoadTest}
+    onPlaceChanged={onPlaceChangedEnd}
+    restrictions = {restrictions}            >
+        <input
+        type='text'
+        placeholder='End Point'
+        />
+    </Autocomplete>
+</LoadScript>
 
-// class MyMapWithAutocomplete extends Component{
-//     constructor (props){
-//         super(props)
-//         this.autocomplete = null
-//         this.onLoad = this.onLoad.bind(this)
-//         this.onPlaceChanged = this.onPlaceChanged.bind(this)
-//     }
-//     componentDidMount(){
-//         this.onLoad();
-//     }
-//     onLoad(autocomplete){
-//         console.log('Autocomplete: ', autocomplete)
-//         this.autocomplete = autocomplete
-//     }
-
+try {
+  await axios.post(
+    `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
+    {
+      address: start.address,
+      lat: start.lat,
+      lng: start.lng,
+      day: 1,
+      start: true,
+      end: false,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+} catch (e) {
+  console.log(e.response.data);
+}
+try {
     
-//     onPlaceChanged(){
-//         if (this.autocomplete !== null){
-//             console.log(this.autocomplete.getPlace());
-//             var place = this.autocomplete.getPlace();
-//             console.log(place.geometry.location.lat());
-//         }else{
-//             console.log('Autocomplete is not loaded yet!')
-//         }
-//     }
-// };
-// var testMap = new MyMapWithAutocomplete();
+  await axios
+    .post(
+      `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
+      {
+        address: end.address,
+        lat: end.lat,
+        lng: end.lng,
+        day: 1,
+        start: false,
+        end: true,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    )
+    .then((response) => {
+      console.log("add end stop");
+      console.log(response.data);
+    });
+} catch (e) {
+  console.log(e.response.data);
+} */}
