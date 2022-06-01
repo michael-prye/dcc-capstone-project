@@ -25,7 +25,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 function App() {
 
   const { user,token } = useContext(AuthContext);
-  const [trips, setTrips] = useState();
+  const [trips, setTrips] = useState([]);
 
   useEffect(()=>{
     getTrips();
@@ -49,7 +49,7 @@ function App() {
     <div>
       <Navbar trips={trips}/>
       <Routes>
-        <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}/>
+        <Route path="/" element={<PrivateRoute><HomePage getTrips={getTrips}/></PrivateRoute>}/>
         <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>}/>
         <Route path="/trip" element={<PrivateRoute><TripPage /></PrivateRoute>}/>
         <Route path="/register" element={<RegisterPage />} />

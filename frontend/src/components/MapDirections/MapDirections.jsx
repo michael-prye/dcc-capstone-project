@@ -18,7 +18,6 @@ const MapDirections = (props) => {
     const restrictions = {country: 'us',}
     const [state, setState] = useState({response: null, travelMode: 'DRIVING',origin: {lat:'',lng: ''}, destination: {lat:'' ,lng:''},waypoints:''})
     const [stops, setStops] = useState([]);
-    const [test, setTest] = useState('test')
     let filteredOrigin = [];
     let filteredDestination = [];
     let filteredWaypoints = [];
@@ -29,11 +28,7 @@ const MapDirections = (props) => {
         getStops();    
     },[tripId])
 
-    useEffect(()=>{
-
-    })
-
-    
+    // refresh gets stops from backend and sorts them into origin, destination and waypoints to update the state to display the route on the map
     function refresh(){
         stops.map((stop)=>{
             if (stop.start === true){
@@ -45,8 +40,6 @@ const MapDirections = (props) => {
             else{
                 filteredWaypoints.push([{location:{lat:stop.lat,lng:stop.lng}}])
             }
-
-            
         })
         console.log('STOPS: ', stops)
         console.log('Origin: ',filteredOrigin)
@@ -89,10 +82,8 @@ const MapDirections = (props) => {
                 setState({response: response})
             }
         }else{console.log('response: ', response)}
-        
     }
        
-
     return ( 
         <Container>
             <button onClick={refresh}>refresh</button>
@@ -132,7 +123,7 @@ const MapDirections = (props) => {
             {(stops.length !==0) ? (
                 <>
                     {stops.map((stop, index)=>{
-                        return(<StopDetails stop={stop}index ={index}/>)
+                        return(<StopDetails stop={stop} stops={stops}/>)
                     })}
                     </>
 
@@ -151,24 +142,3 @@ const MapDirections = (props) => {
 }
  
 export default MapDirections;
-
-// <div>
-// <Autocomplete
-// onLoad={loadStart}
-// onPlaceChanged={onPlaceChangedStart}
-// restrictions = {restrictions}            >
-// <input
-// type='text'
-// placeholder='Starting Point'
-// />
-// </Autocomplete>
-// <Autocomplete
-// onLoad={onLoadTest}
-// onPlaceChanged={onPlaceChangedEnd}
-// restrictions = {restrictions}            >
-// <input
-// type='text'
-// placeholder='End Point'
-// />
-// </Autocomplete>
-// </div>

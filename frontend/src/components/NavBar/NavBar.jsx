@@ -64,13 +64,6 @@ const Navbar = (props) => {
                   </>
                 )}
                 </List>
-                <Row><button onClick={handleModalShow}>CREATE TRIP</button></Row>
-                <Modal show={show} onHide ={handleModalClose} backdrop="static">
-                  <Modal.Header closeButton>
-                    <Modal.Title>CREATE TRIP</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body><input></input></Modal.Body>
-                </Modal>
               </Box>
             </Drawer>
     </div>

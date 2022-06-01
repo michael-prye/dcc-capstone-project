@@ -1,28 +1,51 @@
-import React, {Component, useEffect, useState, useContext } from 'react';
+import React, {useEffect, useState } from 'react';
 import { Autocomplete, GoogleMap, LoadScript,  } from '@react-google-maps/api';
 import axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
 import { googleMapsApiKey } from '../../localkey';
 import useAuth from '../../hooks/useAuth';
-const CreateTripForm = (props) => {
+import { Container, Row } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
+import Toast from 'react-bootstrap/Toast'
+
+const CreateTripForm = (props) => {
+    const navigate = useNavigate();
     const [user,token] = useAuth();
-    const [start,setStart] = useState({address: '',lat: 0, lng: 0})
-    const [end,setEnd] = useState({address: '',lat: 0, lng: 0})
     const [library]  = useState(['places']);
     const restrictions = {country: 'us',}
     const [autocompleteStart, setAutocompleteStart] = useState(null);
     const [autocompleteEnd, setAutocompleteEnd] = useState(null);
-    const [tripName, setTripName] = useState('')
-    const [tripDescription, setTripDescription] = useState('')
-    
-    
+    const [tripName, setTripName] = useState(`My Trip`)
+    const [tripDescription, setTripDescription] = useState('test')
+    const [show,setShow] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
+    const handleClose = ()=> setShow(false);
+    let formatedStops = [];
+    const [tripId,setTripId] =useState();
+    const [trips,setTrips]=useState();
 
+    useEffect(()=>{
+      getTrips();
+    },[])
 
-    function handleSubmit(e){
-        e.preventDefault();
+    async function getTrips(){
+      let response = await axios.get('http://127.0.0.1:8000/api/trip/',
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }).then((response) =>{
+        console.log(response.data)
+        setTrips(response.data)
+      }).catch((error)=>{
+        console.log(error.response)
+      });
     }
-
+    
+    function handleShow(){
+      setShow(true);
+      createTrip();
+    }
     function onLoad(autocomplete){
         console.log('Autocomplete: ', autocomplete);
         setAutocompleteStart(autocomplete);
@@ -33,10 +56,20 @@ const CreateTripForm = (props) => {
     }
     function onPlaceChangedStart(){
         if (autocompleteStart !== null){
-            console.log(autocompleteStart)
             console.log(autocompleteStart.getPlace());
             var place = autocompleteStart.getPlace();
-            setStart({address: place.formatted_address, lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
+            if (place.formatted_address !== undefined){
+              console.log('Selected proper address')
+              const startObj ={
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+                address: place.formatted_address,
+                stop_number: 0,
+                trip_id: tripId,
+              }
+              formatedStops.push(startObj)
+              console.log(formatedStops)
+            }else{setShowAlert(true)}            
         }else{
             console.log('Autocomplete is not loaded yet!')
         }}
@@ -45,16 +78,27 @@ const CreateTripForm = (props) => {
             console.log(autocompleteEnd)
             console.log(autocompleteEnd.getPlace());
             var place = autocompleteEnd.getPlace();
-            setEnd({address: place.formatted_address, lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
+            if (place.formatted_address !== undefined){
+              console.log('Selected proper address')
+              const EndObj ={
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+                address: place.formatted_address,
+                stop_number: 10,
+                trip_id: tripId,
+              }
+              formatedStops.push(EndObj)
+              console.log(formatedStops)
+            }else{setShowAlert(true)}            
         }else{
             console.log('Autocomplete is not loaded yet!')
+            setShowAlert(true)
         }}
-
     async function createTrip(){
         let response = await axios.post(
             `http://127.0.0.1:8000/api/trip/`,
             {
-              name: tripName,
+              name: `${tripName} ${trips.length}`,
               description: tripDescription,
             },
             {
@@ -63,6 +107,8 @@ const CreateTripForm = (props) => {
               },
             });
           try{
+            setTripId(response.data.id)
+            console.log('CREATED TRIP')
             await axios.post(`http://127.0.0.1:8000/api/checklist/?trip=${response.data.id}`,
         {
             name: 'My Checklist'
@@ -73,31 +119,77 @@ const CreateTripForm = (props) => {
               },
         })}
           catch (e) {
-            console.log(e.response.data);
+            console.log('ERROR: ',e.response.data);
           }}
+    
+    async function addStops(){
+      let response = await axios.post(
+        `http://127.0.0.1:8000/api/stop/?trip=${tripId}`,formatedStops,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }).then((response)=>{
+          console.log('ADDSTOPS STATUS: ',response.status)
+        }).catch((response)=>{
+          console.log('ERROR: ',response)
+        })
+    }
+
      
     function handleSave(e){
-        createTrip();
         e.preventDefault();
+        addStops();
+        navigate(`/trip?t=${tripId}`)
         }
     
     return ( 
-        <div>
-        <form>
-        <input
-        type='text'
-        placeholder='Name of trip'
-        value={tripName}
-        onChange={(e)=> setTripName(e.target.value)}/>
-        <input
-        type='text'
-        placeholder='description'
-        value={tripDescription}
-        onChange={(e)=> setTripDescription(e.target.value)}/>
 
-      <button onClick={handleSave}>CREATE TRIP</button>
-      </form>
-      </div>
+      <Container>
+        
+
+        <button onClick={handleShow}>WHERE WOULD YOU LIKE TO GO?</button>
+        {show  &&
+        <div>
+        <Row>
+        <button onClick={handleClose}>close</button>
+        </Row>
+        <Row>
+        <LoadScript
+googleMapsApiKey= {googleMapsApiKey}
+libraries={library}>
+    <Autocomplete
+    onLoad={onLoad}
+    onPlaceChanged={onPlaceChangedStart}
+    restrictions = {restrictions}>
+        <input
+        type='text'
+        placeholder='Starting Point'
+        />
+    </Autocomplete>
+    <Toast show={showAlert} onClose={()=> setShowAlert(false)}><Toast.Header closeButton></Toast.Header><p>ERROR invalid address. Select a propper address</p></Toast >
+    <Autocomplete
+    onLoad={onLoadTest}
+    onPlaceChanged={onPlaceChangedEnd}
+    restrictions = {restrictions}            >
+        <input
+        type='text'
+        placeholder='End Point'
+        />
+    </Autocomplete>
+</LoadScript>
+
+        </Row>
+        <button onClick={handleSave}>SAVE</button>
+        </div>
+                
+        }
+       
+        
+        
+        </Container>
+
+
 
     );
 }

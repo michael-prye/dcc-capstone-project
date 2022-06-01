@@ -5,19 +5,8 @@ import AddStopForm from "../AddStopForm/AddStopForm";
 
 
 const StopDetails = (props) => {
-    const [toggleAdd, setToggleAdd] = useState(false);
-    const [waypts, setWaypts] = useState([]);
     const [addButton, setAddButton]=useState(false)
 
-
-    function handleAdd(){
-        if (toggleAdd){
-            setToggleAdd(false);
-        }else{
-            setToggleAdd(true)
-        }
-
-    }
 
 
 
@@ -25,7 +14,7 @@ const StopDetails = (props) => {
     return ( 
         <Container>
             <Row>
-                <Col>{props.index +1}</Col>
+
                 <Col>{props.stop.address}</Col>
                 {props.stop.start === true || props.stop.end === true?(
                     <Col><button>CHANGE</button></Col>
@@ -36,9 +25,9 @@ const StopDetails = (props) => {
             <Row>
                 {props.stop.end !== true &&
                     <div>
-                    <button onClick={()=>setAddButton(true)}>ADD</button>
+                    <button onClick={function(e){setAddButton(true); console.log(props.stops)}}>ADD</button>
                     {addButton=== true &&
-                    <AddStopForm day = {props.stop.day} waypts={waypts} setWaypts={setWaypts}/> }
+                    <AddStopForm stop = {props.stop} stops={props.stops} /> }
                     </div>
                     
                 }
