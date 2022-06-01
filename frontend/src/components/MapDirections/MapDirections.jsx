@@ -22,37 +22,33 @@ const MapDirections = (props) => {
     let filteredDestination = [];
     let filteredWaypoints = [];
     
-    
-
     useEffect(()=>{
         getStops();    
     },[tripId])
 
-    // refresh gets stops from backend and sorts them into origin, destination and waypoints to update the state to display the route on the map
     function refresh(){
-        stops.map((stop)=>{
-            if (stop.start === true){
+        stops.map((stop, i, {length})=>{
+            if (i ===0){
                 filteredOrigin.push(stop)
             }
-            else if(stop.end ===true){
+            else if(length -1 === i){
                 filteredDestination.push(stop)
             }
             else{
-                filteredWaypoints.push([{location:{lat:stop.lat,lng:stop.lng}}])
+                filteredWaypoints.push({location:{lat: parseFloat(stop.lat),lng: parseFloat(stop.lng)}})
             }
         })
         console.log('STOPS: ', stops)
         console.log('Origin: ',filteredOrigin)
         console.log('destination: ',filteredDestination)
-        console.log(filteredOrigin)
         if (filteredWaypoints.length ===0){
             setState({...state,
                 origin: {lat: parseFloat(filteredOrigin[0].lat) , lng: parseFloat(filteredOrigin[0].lng)},
                 destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)}})
         }else{
             setState({...state,
-                origin: {lat: filteredOrigin[0].lat, lng: filteredOrigin[0].lng},
-                destination: {lat: filteredDestination[0].lat, lng: filteredDestination[0].lng},
+                origin: {lat: parseFloat(filteredOrigin[0].lat), lng: parseFloat(filteredOrigin[0].lng)},
+                destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)},
                 waypoints:filteredWaypoints})
         }
        
@@ -66,8 +62,8 @@ const MapDirections = (props) => {
                 Authorization: "Bearer " + token,
             },
         }).then((response)=>{
-            console.log('STOPS response data: ',response.data)
             setStops(response.data)
+            console.log('GOT STOPS: ', response.status, response.data)
             
         }).catch((error)=>{
             console.log('ERROR: ',error)
@@ -98,7 +94,7 @@ const MapDirections = (props) => {
             center={{lat: 35, lng: -99}}>
                 {state.destination !==''&& state.origin !== ''&&(
                     <DirectionsService
-                    options={{destination: state.destination, origin: state.origin, travelMode: state.travelMode
+                    options={{destination: state.destination, origin: state.origin, travelMode: state.travelMode, waypoints: state.waypoints
                     }}
                     callback={directionsCallback}
                     onLoad={directionsService => {
@@ -120,19 +116,10 @@ const MapDirections = (props) => {
                       }}/>
                 )}
             </GoogleMap>
-            {(stops.length !==0) ? (
-                <>
+
                     {stops.map((stop, index)=>{
-                        return(<StopDetails stop={stop} stops={stops}/>)
+                        return(<StopDetails stop={stop} getStops={getStops}/>)
                     })}
-                    </>
-
-            ):(
-                <CreateStopForm state={state} setState={setState} getStops={getStops}/>
-               
-                
-
-            )}
     
 
         </LoadScript>

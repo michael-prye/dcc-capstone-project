@@ -7,27 +7,22 @@ import AddStopForm from "../AddStopForm/AddStopForm";
 const StopDetails = (props) => {
     const [addButton, setAddButton]=useState(false)
 
-
-
-
-
     return ( 
         <Container>
             <Row>
-
                 <Col>{props.stop.address}</Col>
-                {props.stop.start === true || props.stop.end === true?(
+                {props.stop.stop_number === 0?(
                     <Col><button>CHANGE</button></Col>
                 ):(
                     <Col><button>DELETE</button></Col>
                 )}
             </Row>
             <Row>
-                {props.stop.end !== true &&
+                {props.stop.stop_number !== 0 &&
                     <div>
                     <button onClick={function(e){setAddButton(true); console.log(props.stops)}}>ADD</button>
                     {addButton=== true &&
-                    <AddStopForm stop = {props.stop} stops={props.stops} /> }
+                    <AddStopForm stop = {props.stop} getStops={props.getStops} /> }
                     </div>
                     
                 }
