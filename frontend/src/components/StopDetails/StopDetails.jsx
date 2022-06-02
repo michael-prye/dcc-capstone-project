@@ -20,7 +20,7 @@ const StopDetails = (props) => {
             <Row>
                 {props.stop.stop_number !== 0 &&
                     <div>
-                    <button onClick={function(e){setAddButton(true); console.log(props.stops)}}>ADD</button>
+                    <button onClick={function(e){setAddButton(true); }}>ADD</button>
                     {addButton=== true &&
                     <AddStopForm stop = {props.stop} getStops={props.getStops} /> }
                     </div>

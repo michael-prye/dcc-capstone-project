@@ -16,11 +16,12 @@ const MapDirections = (props) => {
     const tripId = searchParams.get('t')
     const [library]  = useState(['places']);
     const restrictions = {country: 'us',}
-    const [state, setState] = useState({response: null, travelMode: 'DRIVING',origin: {lat:'',lng: ''}, destination: {lat:'' ,lng:''},waypoints:''})
+    const [state, setState] = useState({response: null, travelMode: 'DRIVING',origin: {lat:0,lng: 0}, destination: {lat:0 ,lng:0},waypoints:[]})
     const [stops, setStops] = useState([]);
     let filteredOrigin = [];
     let filteredDestination = [];
     let filteredWaypoints = [];
+    const [callbackRun, setCallbackRun] = useState(false)
     
     useEffect(()=>{
         getStops();    
@@ -38,18 +39,18 @@ const MapDirections = (props) => {
                 filteredWaypoints.push({location:{lat: parseFloat(stop.lat),lng: parseFloat(stop.lng)}})
             }
         })
-        console.log('STOPS: ', stops)
-        console.log('Origin: ',filteredOrigin)
-        console.log('destination: ',filteredDestination)
+
         if (filteredWaypoints.length ===0){
             setState({...state,
                 origin: {lat: parseFloat(filteredOrigin[0].lat) , lng: parseFloat(filteredOrigin[0].lng)},
                 destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)}})
+                setCallbackRun(true)
         }else{
             setState({...state,
                 origin: {lat: parseFloat(filteredOrigin[0].lat), lng: parseFloat(filteredOrigin[0].lng)},
                 destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)},
                 waypoints:filteredWaypoints})
+                setCallbackRun(true)
         }
        
         console.log('STATE: ', state)
@@ -72,10 +73,11 @@ const MapDirections = (props) => {
 
 
     function  directionsCallback(response){
-        console.log(response);
-        if (response !== null){
+        if (response !== null && callbackRun === true){
             if(response.status ==='OK'){
-                setState({response: response})
+                setState({...state, response:response})
+                setCallbackRun(false)
+                console.log('callback ran')
             }
         }else{console.log('response: ', response)}
     }
@@ -92,7 +94,7 @@ const MapDirections = (props) => {
             mapContainerStyle={{height: '400px', width: '500px'}}
             zoom={2}
             center={{lat: 35, lng: -99}}>
-                {state.destination !==''&& state.origin !== ''&&(
+                {state.destination.lat !==0 && state.origin.lat !== 0 &&(
                     <DirectionsService
                     options={{destination: state.destination, origin: state.origin, travelMode: state.travelMode, waypoints: state.waypoints
                     }}
@@ -105,7 +107,7 @@ const MapDirections = (props) => {
                         console.log('DirectionsService onUnmount directionsService: ', directionsService)
                       }}/>
                 )}
-                {state.response !== null &&(
+                {state.response !== null &&
                     <DirectionsRenderer
                     options={{directions: state.response}}
                     onLoad={directionsRenderer => {
@@ -114,7 +116,7 @@ const MapDirections = (props) => {
                       onUnmount={directionsRenderer => {
                         console.log('DirectionsRenderer onUnmount directionsRenderer: ', directionsRenderer)
                       }}/>
-                )}
+                }
             </GoogleMap>
 
                     {stops.map((stop, index)=>{

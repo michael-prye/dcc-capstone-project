@@ -15,6 +15,11 @@ const AddStopForm = (props) => {
     const restrictions = {country: 'us',}
     const [autocomplete, setAutocomplete] = useState(null);
     let formatedStop =[];
+    const [addResponse, setAddResponse] = useState();
+
+    useEffect(()=>{
+        props.getStops();
+    },[addResponse])
     
 
     function onLoad(autocomplete){
@@ -49,6 +54,7 @@ const AddStopForm = (props) => {
             })
         .then((response)=>{
             console.log('addSop:', response.status)
+            setAddResponse(response.data)
         })}
     function handleSave(){
         addStop();
@@ -69,7 +75,7 @@ const AddStopForm = (props) => {
     placeholder='add point'
     />
     </Autocomplete>
-    <button onClick={handleSave}>save</button>
+    <button onClick={()=> {addStop(); props.getStops()}}>save</button>
     </Container> 
     );
 }
