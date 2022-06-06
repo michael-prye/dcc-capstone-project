@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import './TripPage.css'
 import { Col, Container, Row } from 'react-bootstrap';
-import StopDetails from '../../components/StopDetails/StopDetails';
+import TripDetails from '../../components/TripDetails/TripDetails';
 import MapDirections from '../../components/MapDirections/MapDirections';
 import Checklist from '../../components/Checklist/Checklist';
 import Luggage from '../../components/Luggage/Luggage';

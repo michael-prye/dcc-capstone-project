@@ -4,10 +4,11 @@ import useAuth from "../../hooks/useAuth";
 import { googleMapsApiKey } from "../../localkey";
 import { DirectionsRenderer } from '@react-google-maps/api';
 import { Container, Row } from "react-bootstrap";
-import StopDetails from "../StopDetails/StopDetails";
+import TripDetails from "../TripDetails/TripDetails";
 import { useSearchParams } from 'react-router-dom';
 import axios from "axios";
 import CreateStopForm from "../CreateStopForm/CreateStopForm";
+import StopDetails from "../StopDetails/StopDetails";
 
 const MapDirections = (props) => {
 
@@ -21,7 +22,9 @@ const MapDirections = (props) => {
     let filteredOrigin = [];
     let filteredDestination = [];
     let filteredWaypoints = [];
+    const [stopDetails,setStopDetails] = useState();
     const [callbackRun, setCallbackRun] = useState(false)
+    const [selectedRoute, setSelectedRoute] = useState('route');
     
     useEffect(()=>{
         getStops();    
@@ -43,7 +46,8 @@ const MapDirections = (props) => {
         if (filteredWaypoints.length ===0){
             setState({...state,
                 origin: {lat: parseFloat(filteredOrigin[0].lat) , lng: parseFloat(filteredOrigin[0].lng)},
-                destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)}})
+                destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)},
+                waypoints:[]})
                 setCallbackRun(true)
         }else{
             setState({...state,
@@ -82,8 +86,19 @@ const MapDirections = (props) => {
         }else{console.log('response: ', response)}
     }
        
+    function handleSetStop(i){
+        let arr = [stops[i-1],stops[i]]
+        setStopDetails(arr);
+        setSelectedRoute('stop')
+    
+    }
+
+
     return ( 
         <div>
+            
+           
+            
 
             <button onClick={refresh}>refresh</button>
         <LoadScript
@@ -121,11 +136,30 @@ const MapDirections = (props) => {
             </GoogleMap>
             </Row>
             <Row>
+                <button onClick={()=>setSelectedRoute('route')}>TRIP</button>
+                {stops.map((stop,i,length)=>{
+                    return(
+                        <>
+                        {i>0 &&
+                        <button onClick={()=>{handleSetStop(i)}}>day {i}</button>}
+                        </>)
+                })}
 
+            </Row>
+
+                {selectedRoute === 'route'?(
+                    <>
                     {stops.map((stop, i, {length})=>{
-                        return(<StopDetails stop={stop} getStops={getStops} i={i} length={length}/>)
+                        return(<TripDetails stop={stop} getStops={getStops} i={i} length={length}/>)
                     })}
-                    </Row>
+                    </>
+
+                ):(
+                    <StopDetails stops={stopDetails} state={state} setState={setState} setCallbackRun={setCallbackRun}/>
+
+                )}
+                    
+                    
     
 
         </LoadScript>
