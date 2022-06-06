@@ -84,9 +84,8 @@ const TripPage = () => {
                     luggage
                 </button>
         </Row>
-        <Row>
+
         {tripDetails}
-        </Row>
         
         
         </Container>

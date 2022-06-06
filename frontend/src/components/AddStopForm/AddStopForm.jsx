@@ -1,4 +1,4 @@
-import { Component, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -26,7 +26,7 @@ const AddStopForm = (props) => {
             console.log('Autocomplete: ', autocomplete);
             setAutocomplete(autocomplete);}
         
-    function onPlaceChanged(){ // when selecting a new stop trying to splice into the a formated array that will be sent to the backend to update all stops? 
+    function onPlaceChanged(){ 
         if (autocomplete !== null){
             console.log(autocomplete.getPlace());
             var place = autocomplete.getPlace();

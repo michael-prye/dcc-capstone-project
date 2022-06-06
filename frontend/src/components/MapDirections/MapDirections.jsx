@@ -83,15 +83,16 @@ const MapDirections = (props) => {
     }
        
     return ( 
-        <Container>
+        <div>
+
             <button onClick={refresh}>refresh</button>
-     
         <LoadScript
         googleMapsApiKey={googleMapsApiKey}
         libraries={library}>
+            <Row>
             <GoogleMap
             id="directions-map"
-            mapContainerStyle={{height: '400px', width: '500px'}}
+            mapContainerStyle={{height: '400px', width: '900px'}}
             zoom={2}
             center={{lat: 35, lng: -99}}>
                 {state.destination.lat !==0 && state.origin.lat !== 0 &&(
@@ -118,15 +119,19 @@ const MapDirections = (props) => {
                       }}/>
                 }
             </GoogleMap>
+            </Row>
+            <Row>
 
-                    {stops.map((stop, index)=>{
-                        return(<StopDetails stop={stop} getStops={getStops}/>)
+                    {stops.map((stop, i, {length})=>{
+                        return(<StopDetails stop={stop} getStops={getStops} i={i} length={length}/>)
                     })}
+                    </Row>
     
 
         </LoadScript>
+        </div>
         
-        </Container> 
+
     );
 }
  
