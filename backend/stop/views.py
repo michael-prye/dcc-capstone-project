@@ -12,21 +12,24 @@ def get_stop(request):
     stop_id = request.query_params.get('id')
     trip_id = request.query_params.get('trip')
     if request.method == "GET":
-        query_set = Stop.objects.all().order_by('day')
+        if trip_id != None:
+            query_set = Stop.objects.filter(trip_id = trip_id).order_by('stop_number')
+        else:
+            query_set = Stop.objects.all().order_by('day')
         serializer = StopSerializer(query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':
-        stop = {
-            "lat": request.data['lat'],
-            "day": request.data['day'],
-            "lng": request.data['lng'],
-            "trip_id": trip_id,
-            "address": request.data['address'],
-            "start": request.data['start'],
-            "end": request.data['end'],
-        }   
+        # stop = {
+        #     "lat": request.data['lat'],
+        #     "day": request.data['day'],
+        #     "lng": request.data['lng'],
+        #     "trip_id": trip_id,
+        #     "address": request.data['address'],
+        #     "start": request.data['start'],
+        #     "end": request.data['end'],
+        # }   
         
-        serializer = StopSerializer(data=stop)
+        serializer = StopSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
