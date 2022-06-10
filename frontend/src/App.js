@@ -49,7 +49,7 @@ function App() {
     <div>
       <Navbar trips={trips}/>
       <Routes>
-        <Route path="/" element={<PrivateRoute><HomePage getTrips={getTrips}/></PrivateRoute>}/>
+        <Route path="/" element={<PrivateRoute><HomePage getTrips={getTrips} trips={trips}/></PrivateRoute>}/>
         <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>}/>
         <Route path="/trip" element={<PrivateRoute><TripPage /></PrivateRoute>}/>
         <Route path="/register" element={<RegisterPage />} />

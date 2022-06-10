@@ -9,7 +9,7 @@ import TripDetails from '../../components/TripDetails/TripDetails';
 import MapDirections from '../../components/MapDirections/MapDirections';
 import Checklist from '../../components/Checklist/Checklist';
 import Luggage from '../../components/Luggage/Luggage';
-
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 const TripPage = () => {
 
     const [searchParams] = useSearchParams();
@@ -17,6 +17,18 @@ const TripPage = () => {
     const { user,token } = useContext(AuthContext);
     const [trip, setTrip] = useState([]);
     const [detialChoice, setDetialChoice] = useState('map');
+    const [editTrip, setEditTrip] = useState(true)
+    const [name, setName] = useState();
+    const [description, setDescription] = useState();
+
+    function handleEditTrip(){
+        if(editTrip){
+            setEditTrip(false)
+        }
+        else{
+            setEditTrip(true)
+        }
+    }
 
 
 
@@ -54,18 +66,50 @@ const TripPage = () => {
             default:
                 console.log('Not a valid choice');
         }
-    
+        async function updateTrip(){
+            const body ={
+                name: name,
+                description: description,
+            }
+            let response = await axios.put(`http://127.0.0.1:8000/api/trip/?id=${tripId}`,body,
+            {
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+                }).then((response)=>{
+                    console.log(response.data);
+                    getTrip();
+                    setEditTrip(true);
+
+                })
+        }
 
     return ( 
         <div>
         <Container>
             <Row>
-            {trip[0]  &&(
+            {editTrip? (
+                <>
+                {trip[0]  &&(
+                    <div>
+                    <EditOutlinedIcon onClick={handleEditTrip} fontSize='small'/>
+    
+                    <h3>{trip[0].name}</h3>
+                    <h6>{trip[0].description}</h6>
+                    </div>                
+                )}
+                </>
+
+            ):(
                 <div>
-                <h3>{trip[0].name}</h3>
-                <h6>{trip[0].description}</h6>
-                </div>                
+                <input onChange={(e)=> setName(e.target.value)}placeholder={trip[0].name}/>
+                <input onChange={(e)=> setDescription(e.target.value)} placeholder={trip[0].description}/>
+                <button onClick={updateTrip}>save</button>
+                <button onClick={handleEditTrip}>cancle</button>
+
+                </div>
             )}
+            
             </Row>
         <Row>
             <button className={

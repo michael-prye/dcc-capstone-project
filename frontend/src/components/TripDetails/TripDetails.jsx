@@ -17,7 +17,6 @@ const TripDetails = (props) => {
     const [deleteResponse, setdeleteResponse] = useState();
 
     useEffect(()=>{
-        props.getStops();
         setAddButton(false)
     },[deleteResponse])
 

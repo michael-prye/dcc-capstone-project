@@ -22,25 +22,12 @@ const CreateTripForm = (props) => {
     const handleClose = ()=> setShow(false);
     let formatedStops = [];
     const [tripId,setTripId] =useState();
-    const [trips,setTrips]=useState();
-
+   
     useEffect(()=>{
-      getTrips();
+      props.getTrips();
     },[])
-
-    async function getTrips(){
-      let response = await axios.get('http://127.0.0.1:8000/api/trip/',
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }).then((response) =>{
-        console.log(response.data)
-        setTrips(response.data)
-      }).catch((error)=>{
-        console.log(error.response)
-      });
-    }
+  
+    
     
     function handleShow(){
       setShow(true);
@@ -98,7 +85,7 @@ const CreateTripForm = (props) => {
         let response = await axios.post(
             `http://127.0.0.1:8000/api/trip/`,
             {
-              name: `${tripName} ${trips.length}`,
+              name: `${tripName} ${props.trips.length + 1}`,
               description: tripDescription,
             },
             {

@@ -3,11 +3,10 @@ import { GoogleMap, LoadScript, DirectionsService } from "@react-google-maps/api
 import useAuth from "../../hooks/useAuth";
 import { googleMapsApiKey } from "../../localkey";
 import { DirectionsRenderer } from '@react-google-maps/api';
-import { Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import TripDetails from "../TripDetails/TripDetails";
 import { useSearchParams } from 'react-router-dom';
 import axios from "axios";
-import CreateStopForm from "../CreateStopForm/CreateStopForm";
 import StopDetails from "../StopDetails/StopDetails";
 
 const MapDirections = (props) => {
@@ -18,46 +17,50 @@ const MapDirections = (props) => {
     const [library]  = useState(['places']);
     const restrictions = {country: 'us',}
     const [state, setState] = useState({response: null, travelMode: 'DRIVING',origin: {lat:0,lng: 0}, destination: {lat:0 ,lng:0},waypoints:[]})
-    const [stops, setStops] = useState([]);
+    const [stops, setStops] = useState();
     let filteredOrigin = [];
     let filteredDestination = [];
     let filteredWaypoints = [];
     const [stopDetails,setStopDetails] = useState();
     const [callbackRun, setCallbackRun] = useState(false)
+    const [getStopsRun, setGetStopsRun] = useState(0)
     const [selectedRoute, setSelectedRoute] = useState('route');
+    let test = []
     
     useEffect(()=>{
-        getStops();    
+        getStops();   
     },[tripId])
 
-    function refresh(){
-        stops.map((stop, i, {length})=>{
-            if (i ===0){
-                filteredOrigin.push(stop)
-            }
-            else if(length -1 === i){
-                filteredDestination.push(stop)
-            }
-            else{
-                filteredWaypoints.push({location:{lat: parseFloat(stop.lat),lng: parseFloat(stop.lng)}})
-            }
-        })
 
-        if (filteredWaypoints.length ===0){
-            setState({...state,
-                origin: {lat: parseFloat(filteredOrigin[0].lat) , lng: parseFloat(filteredOrigin[0].lng)},
-                destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)},
-                waypoints:[]})
-                setCallbackRun(true)
-        }else{
-            setState({...state,
-                origin: {lat: parseFloat(filteredOrigin[0].lat), lng: parseFloat(filteredOrigin[0].lng)},
-                destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)},
-                waypoints:filteredWaypoints})
-                setCallbackRun(true)
-        }
-       
-        console.log('STATE: ', state)
+    function refresh(){
+           
+            stops.map((stop, i, {length})=>{
+                if (i ===0){
+                    filteredOrigin.push(stop)
+                }
+                else if(length -1 === i){
+                    filteredDestination.push(stop)
+                }
+                else{
+                    filteredWaypoints.push({location:{lat: parseFloat(stop.lat),lng: parseFloat(stop.lng)}})
+                }
+            })
+    
+            if (filteredWaypoints.length ===0){
+                setState({...state,
+                    origin: {lat: parseFloat(filteredOrigin[0].lat) , lng: parseFloat(filteredOrigin[0].lng)},
+                    destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)},
+                    waypoints:[]})
+                    setCallbackRun(true)
+            }else{
+                setState({...state,
+                    origin: {lat: parseFloat(filteredOrigin[0].lat), lng: parseFloat(filteredOrigin[0].lng)},
+                    destination: {lat: parseFloat(filteredDestination[0].lat), lng: parseFloat(filteredDestination[0].lng)},
+                    waypoints:filteredWaypoints})
+                    setCallbackRun(true)
+            }
+           
+            console.log('STATE: ', state)
 
     }
     async function getStops(){
@@ -67,9 +70,10 @@ const MapDirections = (props) => {
                 Authorization: "Bearer " + token,
             },
         }).then((response)=>{
+            
             setStops(response.data)
             console.log('GOT STOPS: ', response.status, response.data)
-            
+
         }).catch((error)=>{
             console.log('ERROR: ',error)
         });}
@@ -82,6 +86,7 @@ const MapDirections = (props) => {
                 setState({...state, response:response})
                 setCallbackRun(false)
                 console.log('callback ran')
+                console.log(callbackRun)
             }
         }else{console.log('response: ', response)}
     }
@@ -100,11 +105,12 @@ const MapDirections = (props) => {
            
             
 
-            <button onClick={refresh}>refresh</button>
+            
         <LoadScript
         googleMapsApiKey={googleMapsApiKey}
         libraries={library}>
             <Row>
+                <Col>
             <GoogleMap
             id="directions-map"
             mapContainerStyle={{height: '400px', width: '900px'}}
@@ -134,9 +140,15 @@ const MapDirections = (props) => {
                       }}/>
                 }
             </GoogleMap>
+            </Col>
+            <Col>
+            <button onClick={refresh}>refresh</button>
+            </Col>
             </Row>
             <Row>
                 <button onClick={()=>setSelectedRoute('route')}>TRIP</button>
+                {stops !== undefined &&
+                <>
                 {stops.map((stop,i,length)=>{
                     return(
                         <>
@@ -144,14 +156,23 @@ const MapDirections = (props) => {
                         <button onClick={()=>{handleSetStop(i)}}>day {i}</button>}
                         </>)
                 })}
+                </>
+                
+                
+                }
+                
 
             </Row>
 
                 {selectedRoute === 'route'?(
                     <>
+                    {stops !== undefined &&
+                    <>
                     {stops.map((stop, i, {length})=>{
-                        return(<TripDetails stop={stop} getStops={getStops} i={i} length={length}/>)
+                        return(<TripDetails stop={stop} getStops={getStops} i={i} length={length} refresh={refresh}/>)
                     })}
+                    </>
+                }
                     </>
 
                 ):(

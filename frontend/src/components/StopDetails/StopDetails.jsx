@@ -1,17 +1,47 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import WeatherCard from "../WeatherCard/WeatherCard";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import GetHotels from "../GetHotels/GetHotels";
+import RestaurantCard from "../RestaurantCard/RestaurantCard";
+
+
+
+
+
 
 
 const StopDetails = (props) => {
 
     const [weather,setWeather] = useState([]);
-
+    const [restaurantData, setRestaurantData] = useState([]);
+    const [restaurantTogle, setRestaurantTogle] = useState(false);
+    const responsive = {
+        desktop: {
+            breakpoint: { max: 3000, min: 10 },
+            items: 3,
+          },
+    }
+    
+    
     useEffect(()=>{
         updateMap();
         getWeather();
+         getRestaurants();
+        
     },[props.stops])
+
+    function handleRestaurantTogle(){
+        if (restaurantTogle === true){
+            setRestaurantTogle(false)
+        }
+        else{
+            setRestaurantTogle(true)
+        }
+    }
+    
 
     async function getWeather(){
         let data = [];
@@ -40,9 +70,6 @@ const StopDetails = (props) => {
         console.log('final DATA: ', data)
         setWeather(data)
         console.log(weather)
-
-
-
     }
 
     function updateMap(){
@@ -53,9 +80,35 @@ const StopDetails = (props) => {
            props.setCallbackRun(true)
     }
 
-
-
-
+    
+        async function getRestaurants(){
+            const options = {
+                method: 'GET',
+                url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng',
+                params:{
+                    latitude: `${props.stops[1].lat}`,
+                    longitude: `${props.stops[1].lng}`,
+                    limit: '30',
+                    currency: 'USD',
+                    distance: '5',
+                    open_now: 'false',
+                    lunit: 'km',
+                    lang: 'en_US'
+                },
+                headers: {
+                    'X-RapidAPI-Key': 'd466a51d92msh636b7041ef292e2p1a8916jsnedb8001f5e6d',
+                    'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
+                  }
+            }
+    
+            let response = await axios.request(options).then((response)=>{
+                const data = response.data.data.filter(restaurant=> restaurant.name !== undefined );
+                const testData = data.filter(i=> i.photo !== undefined );
+                console.log('restaurant data: ',testData)
+                setRestaurantData(testData);
+            })
+                
+        }
 
     return ( 
         <>
@@ -67,9 +120,24 @@ const StopDetails = (props) => {
             return(<WeatherCard weather={weather}/>)
         })}
         </Row>
+        
+        <button onClick={handleRestaurantTogle}>restaurants</button>
+        {restaurantTogle === true && (
+            <Carousel responsive={responsive}>
+            {restaurantData.map((restaurant)=>{
+                return(
+                    <RestaurantCard restaurant={restaurant}/>
+                )
+            })}
+        </Carousel>
+
+        )}
+        <GetHotels stops= {props.stops}/>
+        
         </>
 
      );
 }
  
 export default StopDetails;
+
