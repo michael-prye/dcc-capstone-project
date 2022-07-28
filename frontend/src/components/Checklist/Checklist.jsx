@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { Row,Container } from "react-bootstrap";
+import { Row,Container, Col } from "react-bootstrap";
+import "./Checklist.css"
+import ClearIcon from '@mui/icons-material/Clear';
+
 
 
 const Checklist = (props) => {
@@ -69,30 +72,33 @@ const Checklist = (props) => {
 
 
     return (
-        <div>
-        <Container>
-            <p>CHECKLIST</p>
+        <div className="checklist">
+        
+           
+            <Col><h2>CHECKLIST</h2></Col>
+            
         <Row>
         
             <input type="text"
+            className="list-input"
             placeholder="Item"
             value={itemName}
             onChange={(e)=>setItemName(e.target.value)} />
-            <button onClick={()=>{addItem();getChecklist();}}>ADD</button>
+            <button className="list-button" onClick={()=>{addItem();getChecklist();}}>ADD</button>
         
         </Row>
-        </Container>
-        <Container>
+        
+        
         {listItems.map((item)=>{
             return(
-                <Row>
+                <Row bsPrefix="delete-item">
                 <p>{item.name}</p>
-                <button onClick={()=>{deleteItem(item.id); getChecklist();}}>DELETE</button>
+                <ClearIcon onClick={()=>{deleteItem(item.id); getChecklist();}}></ClearIcon>
                 </Row>
                 
             )
         })}
-        </Container>
+     
         </div>
     );
 }

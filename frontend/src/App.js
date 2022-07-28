@@ -47,7 +47,7 @@ function App() {
 
   return (
     <div>
-      <Navbar trips={trips}/>
+      <Navbar trips={trips} getTrips={getTrips}/>
       <Routes>
         <Route path="/" element={<PrivateRoute><HomePage getTrips={getTrips} trips={trips}/></PrivateRoute>}/>
         <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>}/>

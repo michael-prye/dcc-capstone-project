@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { Container } from "react-bootstrap";
+import "./AddStopForm.css"
 
 
 
@@ -70,12 +71,12 @@ const AddStopForm = (props) => {
     onLoad={onLoad}
     onPlaceChanged={onPlaceChanged}
     restrictions = {restrictions}            >
-    <input
+    <input className="add-input"
     type='text'
     placeholder='add point'
     />
     </Autocomplete>
-    <button onClick={()=> {addStop(); props.getStops()}}>save</button>
+    <button className="add-button" onClick={()=> {addStop(); props.getStops()}}>save</button>
     </Container> 
     );
 }

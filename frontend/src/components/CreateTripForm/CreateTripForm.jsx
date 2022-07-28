@@ -3,9 +3,10 @@ import { Autocomplete, GoogleMap, LoadScript,  } from '@react-google-maps/api';
 import axios from 'axios';
 import { googleMapsApiKey } from '../../localkey';
 import useAuth from '../../hooks/useAuth';
-import { Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-
+import './CreateTripForm.css'
+import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import Toast from 'react-bootstrap/Toast'
 
 const CreateTripForm = (props) => {
@@ -16,22 +17,23 @@ const CreateTripForm = (props) => {
     const [autocompleteStart, setAutocompleteStart] = useState(null);
     const [autocompleteEnd, setAutocompleteEnd] = useState(null);
     const [tripName, setTripName] = useState(`My Trip`)
-    const [tripDescription, setTripDescription] = useState('test')
+    const [tripDescription, setTripDescription] = useState('Description')
     const [show,setShow] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
     const handleClose = ()=> setShow(false);
     let formatedStops = [];
     const [tripId,setTripId] =useState();
+
    
     useEffect(()=>{
-      props.getTrips();
+     
     },[])
   
     
     
     function handleShow(){
       setShow(true);
-      createTrip();
+      
     }
     function onLoad(autocomplete){
         console.log('Autocomplete: ', autocomplete);
@@ -52,7 +54,7 @@ const CreateTripForm = (props) => {
                 lng: place.geometry.location.lng(),
                 address: place.formatted_address,
                 stop_number: 0,
-                trip_id: tripId,
+                trip_id: 0,
               }
               formatedStops.push(startObj)
               console.log(formatedStops)
@@ -72,7 +74,7 @@ const CreateTripForm = (props) => {
                 lng: place.geometry.location.lng(),
                 address: place.formatted_address,
                 stop_number: 10,
-                trip_id: tripId,
+                trip_id: 0,
               }
               formatedStops.push(EndObj)
               console.log(formatedStops)
@@ -107,7 +109,15 @@ const CreateTripForm = (props) => {
         })}
           catch (e) {
             console.log('ERROR: ',e.response.data);
-          }}
+          }try{
+            await axios.post(
+              `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,formatedStops,
+              {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              }).then((response)=>{console.log('ADDSTOPS STATUS: ',response.status); navigate(`/trip?t=${response.data[0].trip.id}`);})
+          }catch(e){console.log(e)}}
     
     async function addStops(){
       let response = await axios.post(
@@ -131,25 +141,20 @@ const CreateTripForm = (props) => {
         }
     
     return ( 
-
-      <Container>
-        
-
-        <button onClick={handleShow}>WHERE WOULD YOU LIKE TO GO?</button>
+        <div>
+        <button className='create-trip' onClick={handleShow}><h2>WHERE WOULD YOU LIKE TO GO?</h2></button>
         {show  &&
         <div>
-        <Row>
-        <button onClick={handleClose}>close</button>
-        </Row>
         <Row>
         <LoadScript
 googleMapsApiKey= {googleMapsApiKey}
 libraries={library}>
+    <Col>
     <Autocomplete
     onLoad={onLoad}
     onPlaceChanged={onPlaceChangedStart}
     restrictions = {restrictions}>
-        <input
+        <input className='trip-input'
         type='text'
         placeholder='Starting Point'
         />
@@ -160,95 +165,26 @@ libraries={library}>
     onPlaceChanged={onPlaceChangedEnd}
     restrictions = {restrictions}            >
         <input
+        className='trip-input'
         type='text'
         placeholder='End Point'
         />
     </Autocomplete>
+    </Col>
 </LoadScript>
 
         </Row>
-        <button onClick={handleSave}>SAVE</button>
+        <Row bsPrefix='trip-button-row'><Col>
+        <button className='trip-button' onClick={createTrip}>SAVE</button></Col>
+       <Col> <button className='trip-button' onClick={handleClose}>CLOSE</button></Col>
+        </Row>
         </div>
                 
         }
+        </div>
        
         
-        
-        </Container>
-
-
-
     );
 }
  
 export default CreateTripForm;
-
-{/* <LoadScript
-googleMapsApiKey= {googleMapsApiKey}
-libraries={library}>
-    <Autocomplete
-    onLoad={onLoad}
-    onPlaceChanged={onPlaceChangedStart}
-    restrictions = {restrictions}            >
-        <input
-        type='text'
-        placeholder='Starting Point'
-        />
-    </Autocomplete>
-    <Autocomplete
-    onLoad={onLoadTest}
-    onPlaceChanged={onPlaceChangedEnd}
-    restrictions = {restrictions}            >
-        <input
-        type='text'
-        placeholder='End Point'
-        />
-    </Autocomplete>
-</LoadScript>
-
-try {
-  await axios.post(
-    `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
-    {
-      address: start.address,
-      lat: start.lat,
-      lng: start.lng,
-      day: 1,
-      start: true,
-      end: false,
-    },
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
-} catch (e) {
-  console.log(e.response.data);
-}
-try {
-    
-  await axios
-    .post(
-      `http://127.0.0.1:8000/api/stop/?trip=${response.data.id}`,
-      {
-        address: end.address,
-        lat: end.lat,
-        lng: end.lng,
-        day: 1,
-        start: false,
-        end: true,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    )
-    .then((response) => {
-      console.log("add end stop");
-      console.log(response.data);
-    });
-} catch (e) {
-  console.log(e.response.data);
-} */}

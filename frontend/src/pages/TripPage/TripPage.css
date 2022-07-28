@@ -3,3 +3,75 @@
     width: 100%;
     background-color: gray;
 }
+.tab--active {
+    margin-right: 8px;
+    background-color: #fef4f4;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom-style: none;
+    border-color: #fef4f4;
+    color: #f65151;
+  }
+  
+  .tab--inactive {
+    margin-right: 8px;
+    background-color: #f65151;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fef4f4;
+    border-bottom-style: none;
+    padding: 3px;
+  }
+  .trip-tabs{
+    display: flex;
+    justify-content: center;
+    border-bottom-style: solid;
+    border-bottom-color: #f65151;
+  }
+  .trip-info{
+    display: flex;
+    justify-content: center;
+    margin: 25px;
+    color: #fef4f4;
+  }
+  .update-trip-input{
+    border-width: 0px;
+    border-bottom-width: 3px;
+    border-color: #fef4f4;
+    background: none;
+    color: #fef4f4;
+    margin-right: 25px;
+    
+  }
+  .update-trip-input:focus{
+    outline: none;
+
+  }
+  ::placeholder{
+    color: #fef4f4;
+  }
+.update-button{
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  margin: 5px;
+    
+}
+.update-button:hover{
+  background: #fef4f4;
+  color: #f65151;
+  cursor: pointer;
+}
+.update-trip-col{
+  display: flex;
+    justify-content: space-around;
+}
+.trip-info-border{
+  border: 2px solid #f65151;
+  padding: 5px;
+
+}

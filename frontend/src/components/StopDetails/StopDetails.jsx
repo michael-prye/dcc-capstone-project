@@ -6,6 +6,8 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import GetHotels from "../GetHotels/GetHotels";
 import RestaurantCard from "../RestaurantCard/RestaurantCard";
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import "./StopDetails.css"
 
 
 
@@ -18,6 +20,7 @@ const StopDetails = (props) => {
     const [weather,setWeather] = useState([]);
     const [restaurantData, setRestaurantData] = useState([]);
     const [restaurantTogle, setRestaurantTogle] = useState(false);
+    const [weatherTogle, setWeatherTogle] = useState(false)
     const responsive = {
         desktop: {
             breakpoint: { max: 3000, min: 10 },
@@ -39,6 +42,14 @@ const StopDetails = (props) => {
         }
         else{
             setRestaurantTogle(true)
+        }
+    }
+    function handleWeatherTogle(){
+        if (weatherTogle === true){
+            setWeatherTogle(false)
+        }
+        else{
+            setWeatherTogle(true)
         }
     }
     
@@ -112,27 +123,45 @@ const StopDetails = (props) => {
 
     return ( 
         <>
-        {props.stops.map((stop)=>{
-            return(<p>{stop.address}</p>)
-        })}
-        <Row>
-        {weather.map((weather)=>{
-            return(<WeatherCard weather={weather}/>)
-        })}
+        <Row bsPrefix="stops">
+            <h3>{props.stops[0].address}</h3><ArrowRightAltIcon/>
+            <h3>{props.stops[1].address}</h3>
         </Row>
+        <Row>
+        <button className="stop-details" onClick={handleWeatherTogle}>Weather</button>
+        <Row bsPrefix="weather">
         
-        <button onClick={handleRestaurantTogle}>restaurants</button>
+        {weatherTogle === true&& (
+            <>
+            {weather.map((weather)=>{
+                return(<WeatherCard weather={weather}/>)
+            })}
+            </>
+        )}
+        
+        </Row>
+        <button className="stop-details" onClick={handleRestaurantTogle}>restaurants</button>
+        <Row bsPrefix="restaurants">
+        
+        
         {restaurantTogle === true && (
-            <Carousel responsive={responsive}>
+           
+            <Carousel responsive={responsive} shouldResetAutoplay={false} infinite={true}
+            centerMode={true}>
             {restaurantData.map((restaurant)=>{
                 return(
                     <RestaurantCard restaurant={restaurant}/>
                 )
             })}
         </Carousel>
+        
 
         )}
+        </Row>
+        
         <GetHotels stops= {props.stops}/>
+        </Row>
+        
         
         </>
 

@@ -17,21 +17,10 @@ p {
   font-size: 20px;
 }
 
-button {
-  background-color: transparent;
-  border: 2px solid steelblue;
-  color: steelblue;
-  font-size: 1rem;
-  font-family: inherit;
-  max-width: 100px;
-  padding: 0.5rem 0.5rem;
-}
 
-button:hover {
-  cursor: pointer;
-  color: white;
-  background-color: steelblue;
-}
+
+
+
 
 .container {
   margin: 0 auto;

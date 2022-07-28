@@ -1,0 +1,16 @@
+.add-input{
+    border-width: 0px;
+    border-bottom-width: 3px;
+    border-color: black;
+    background: none;
+}
+.add-input:focus{
+    outline: none;
+}
+.add-button{
+    border-width: 0px;
+    background: none;
+}
+.add-button:hover{
+    border-bottom-width: 2px;
+}

@@ -1,0 +1,28 @@
+.stops{
+    display: flex;
+    width: 900px;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    border-bottom-style: solid;
+    border-color: #f65151;
+    color: #fef4f4;
+}
+.weather{
+    display: flex;
+    width: 900px;
+    justify-content: space-around;
+}
+.restaurants{
+    width: 900px;
+}
+.stop-details{
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 2px;
+}
+.stop-details:hover{
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
+}

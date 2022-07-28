@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
+import "./LuggageItems.css"
+import ClearIcon from '@mui/icons-material/Clear';
+
 
 
 
@@ -24,6 +27,7 @@ const LuggageItems = (props) => {
         ).then((response) => {
             console.log('getLuggageItems: ', response.status, response.data)
             setLuggageItems(response.data)
+            setLuggageItemName('')
         })
     }
     async function addLuggageItem(){
@@ -58,16 +62,16 @@ const LuggageItems = (props) => {
 
     return ( 
         <div>
-            <input type="text"
-            placeholder="item"
+            <input className="item-input" type="text"
+            placeholder="Luggage Item"
             value={luggageItemName}
             onChange={(e)=>setLuggageItemName(e.target.value)} />
-            <button onClick={()=>{addLuggageItem()}}>ADD</button>
+            <button className="item-button" onClick={()=>{addLuggageItem()}}>ADD</button>
             {luggageItems.map((item)=>{
                 return(
-                    <div>
-                        <p>{item.name}</p>
-                        <button onClick={()=>{deleteLuggageItem(item.id)}}>DELETE item</button>
+                    <div className="item-list">
+                        <h5>{item.name}</h5>
+                        <ClearIcon fontSize="small" onClick={()=>{deleteLuggageItem(item.id)}}/>
                     </div>
                 )
             })}

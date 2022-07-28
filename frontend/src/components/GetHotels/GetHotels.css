@@ -1,0 +1,14 @@
+.hotels{
+    width: 900px;
+}
+.hotel-button{
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 2px;
+}
+.hotel-button:hover{
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
+}

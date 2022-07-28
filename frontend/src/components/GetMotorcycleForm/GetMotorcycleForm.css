@@ -1,4 +1,21 @@
-.custom-row{
+.form-row{
     display: flex;
     justify-content: center
+}
+.custom-input{
+    border-width: 0px;
+    border-bottom-width: 3px;
+    border-color: black;
+    background: none;
+    margin-right: 10px;
+}
+.custom-input:focus{
+    outline: none;
+}
+.save-button{
+    border-style: none;
+    background: none;
+}
+.save-button:hover{
+    border-bottom-style: solid;
 }

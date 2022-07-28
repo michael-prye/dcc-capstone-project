@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import "./UpdateStop.css"
+import { Col, Container, Row } from 'react-bootstrap';
+
 
 const UpdateStop = (props) => {
     const [user,token] = useAuth();
@@ -45,6 +48,7 @@ async function updateStop(){
     .then((response)=>{
         console.log('Update Stop', response.data,)
         setPutResponse(response.data)
+        props.getStops();
     }).catch((error)=>{
         console.log('PUT ERROR: ', error.request)
         console.log(response.data)
@@ -53,18 +57,20 @@ async function updateStop(){
 
 
     return ( 
-        <>
+        <Row bsPrefix="update-row">
+        
         <Autocomplete
         onLoad={onLoad}
         onPlaceChanged={onPlaceChanged}
         restrictions = {restrictions}            >
-        <input
+        <input className="change-input"
         type='text'
-        placeholder='add point'
+        placeholder='Update Stop'
     />
         </Autocomplete>
-        <button onClick={()=> {updateStop();props.setChangeButton(false)}}>SAVE</button>
-        </>
+        <button className="change-button" onClick={()=> {updateStop();props.setChangeButton(false)}}>SAVE</button>
+        <button className="change-button" onClick={()=> props.setChangeButton(false)}>Cancle</button>
+        </Row>
      );
 }
  

@@ -6,6 +6,11 @@ import UpdateStop from "../UpdateStop/UpdateStop";
 import { Snackbar, Alert, Dialog, DialogTitle } from "@mui/material";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import ClearIcon from '@mui/icons-material/Clear';
+import AddLocationIcon from '@mui/icons-material/AddLocation';
+
+
 
 
 const TripDetails = (props) => {
@@ -57,6 +62,8 @@ const TripDetails = (props) => {
         ).then((response)=>{
             console.log(response.status)
             setdeleteResponse(response.data)
+            props.getStops();
+
 
         })
     }
@@ -64,16 +71,18 @@ const TripDetails = (props) => {
     return ( 
        <div>
            
-            <Row>
+            <Row bsPrefix="trip-details">
                 {changeButton?
                 <>
                 <UpdateStop getStops={props.getStops} id={props.stop.id} setChangeButton={setChangeButton}/>
                 </>  
             :
             <>
-            {props.stop.address}
+
+            <p className="trip-detail">{String.fromCharCode((props.i + 1) +64)}.</p>
+            <p className="trip-detail">{props.stop.address}</p>
             {props.stop.stop_number === 0?(
-                <button onClick={()=>setChangeButton(true)}>CHANGE</button>
+                <button className="trip-button" onClick={()=>setChangeButton(true)}>CHANGE</button>
             ):(
                 <>
                 <Snackbar open={deleteError} autoHideDuration={1000} onClose={()=>setDeleteError(false)}>
@@ -81,7 +90,7 @@ const TripDetails = (props) => {
                         Cant't Delete need at least a starting and end point
                     </Alert>
                 </Snackbar>
-                <button id="delete" onClick={()=>{handleDelete();}}>DELETE</button>
+                <button className="trip-button" onClick={()=>{handleDelete();}}>DELETE</button>
 
                 </>
             )}
@@ -92,7 +101,7 @@ const TripDetails = (props) => {
            
                 {props.length -1 === props.i &&
                     <div>
-                    <button id="add" onClick={handleAdd}>ADD</button>
+                    <button className="trip-button" onClick={handleAdd}>ADD</button>
                     {addButton=== true &&
                     <AddStopForm stop = {props.stop} getStops={props.getStops} /> }
                     </div>

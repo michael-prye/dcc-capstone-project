@@ -2,6 +2,10 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import LuggageItems from "./LuggageItems/LuggageItems";
+import "./Luggage.css"
+import ClearIcon from '@mui/icons-material/Clear';
+import { Col, Container, Row } from 'react-bootstrap';
+
 
 
 
@@ -40,6 +44,7 @@ const Luggage = (props) => {
         )
         console.log('addLuggage: ', response.data, response.status)
         getLuggage();
+        setLuggageName('')
     }
     async function deleteLuggage(id){
         let response = await axios.delete(
@@ -56,18 +61,25 @@ const Luggage = (props) => {
 
     
     return ( 
-        <div>
-            <input type="text"
+        <div className="luggage">
+            <div className="luggage-header">
+            <h2>Luggage</h2>
+            </div>
+            <div className="user-input">
+            <input className="luggage-input" type="text"
             placeholder="luggage"
             value={luggageName}
             onChange={(e)=>setLuggageName(e.target.value)} />
-            <button onClick={()=>{addLuggage()}}>ADD</button>
+            <button className="luggage-button" onClick={()=>{addLuggage()}}>ADD</button>
+            </div>
+            
             {luggage.map((l)=>{
                 return(
-                    <div>
-                    
-                    <p>{l.name}</p>
-                    <button onClick={()=>{deleteLuggage(l.id)}}>DELETE Luggage</button>
+                    <div className="lu">
+                    <Row bsPrefix="luggage-list">
+                    <h3>{l.name}</h3>
+                    <ClearIcon onClick={()=>{deleteLuggage(l.id)}}/>
+                    </Row>
                     <LuggageItems id = {l.id}/>
                     </div>
                 )

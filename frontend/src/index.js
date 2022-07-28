@@ -4,6 +4,7 @@ import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import "react-datetime/css/react-datetime.css";
+import "./index.css"
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,0 +1,27 @@
+.delete-button{
+    background: none;
+    border-width: 0px;
+}
+.button-on{
+    visibility: visible
+}
+.button-off{
+    visibility: hidden;
+}
+.trip-card{
+border: 2px solid #f65151;
+margin: 5px;
+color: #fef4f4;
+}
+.trip-card:hover{
+    background-color: #fef4f4;
+    color: #f65151;
+}
+
+.welcome{
+    color: #fef4f4;
+}
+.react-multi-carousel-list{
+    margin: 5px;
+    justify-content: center;
+}

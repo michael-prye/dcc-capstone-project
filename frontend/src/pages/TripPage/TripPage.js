@@ -1,5 +1,4 @@
 import React, {Component, useEffect, useState, useContext } from 'react';
-import { Autocomplete, GoogleMap, LoadScript,  } from '@react-google-maps/api';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
@@ -85,13 +84,13 @@ const TripPage = () => {
         }
 
     return ( 
-        <div>
-        <Container>
-            <Row>
+        
+        <Container bsPrefix='trip-page-body'>
+            <Row bsPrefix='trip-info'>
             {editTrip? (
                 <>
                 {trip[0]  &&(
-                    <div>
+                    <div className='trip-info-border'>
                     <EditOutlinedIcon onClick={handleEditTrip} fontSize='small'/>
     
                     <h3>{trip[0].name}</h3>
@@ -101,39 +100,37 @@ const TripPage = () => {
                 </>
 
             ):(
-                <div>
-                <input onChange={(e)=> setName(e.target.value)}placeholder={trip[0].name}/>
-                <input onChange={(e)=> setDescription(e.target.value)} placeholder={trip[0].description}/>
-                <button onClick={updateTrip}>save</button>
-                <button onClick={handleEditTrip}>cancle</button>
-
+                <div className='trip-info-border'>
+                <Col><input className='update-trip-input' onChange={(e)=> setName(e.target.value)}placeholder={trip[0].name}/>
+                <input className='update-trip-input' onChange={(e)=> setDescription(e.target.value)} placeholder={trip[0].description}/>
+                </Col><Col bsPrefix='update-trip-col'><button className='update-button' onClick={updateTrip}>save</button>
+                <button className='update-button' onClick={handleEditTrip}>cancle</button>
+                </Col>
                 </div>
             )}
             
             </Row>
-        <Row>
+        <Row bsPrefix='trip-tabs'>
+        <button className={
+                detialChoice === 'map' ? 'tab--active':'tab--inactive'}
+                onClick={()=>setDetialChoice('map')}>
+                    Map
+                </button>
             <button className={
                 detialChoice=== 'checklist' ? 'tab--active':'tab--inactive'            }
             onClick={()=> setDetialChoice('checklist')}>
                 Checklist
             </button>
-            <button className={
-                detialChoice === 'map' ? 'tab--active':'tab--inactive'}
-                onClick={()=>setDetialChoice('map')}>
-                    Map
-                </button>
+            
             <button className={
                 detialChoice === 'luggage' ? 'tab--active':'tab--inactive'}
                 onClick={()=>setDetialChoice('luggage')}>
                     luggage
                 </button>
         </Row>
-
-        {tripDetails}
-        
-        
+        {tripDetails} 
         </Container>
-        </div>
+      
      );
 }
  

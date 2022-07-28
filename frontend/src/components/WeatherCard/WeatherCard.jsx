@@ -11,7 +11,7 @@ const WeatherCard = (props) => {
     
         <>
         <Col>
-        <Card>
+        <Card raised={true} sx={{background:'#f65151', color: '#fef4f4'}}>
             <CardHeader title={props.weather.location.name}>
                 {props.weather.location.name}
             </CardHeader>
@@ -20,7 +20,7 @@ const WeatherCard = (props) => {
                 <img src={props.weather.current.condition.icon}/>
                 <p>TEMP: {props.weather.current.temp_f}</p>
                 <p>wind mph: {props.weather.current.wind_mph}</p>
-                <p>Chance of rain: {props.weather.forecast.forecastday[0].day.daily_chance_of_rain}</p>
+                <p>Chance of rain: {props.weather.forecast.forecastday[0].day.daily_chance_of_rain}%</p>
             </CardContent>
         </Card>
         </Col>

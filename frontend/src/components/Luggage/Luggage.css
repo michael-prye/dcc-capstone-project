@@ -1,0 +1,35 @@
+.luggage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fef4f4 ;
+}
+.luggage-input{
+    border-width: 0px;
+    border-bottom-width: 3px;
+    border-color: #fef4f4;
+    background: none;
+    color: #fef4f4;
+    margin-right: 5px;
+}
+.luggage-input:focus{
+    outline: none;
+}
+.luggage-button{
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+.luggage-button:hover{
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
+}
+.luggage-input{
+    margin-bottom: 15px;
+}
+.luggage-list{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}

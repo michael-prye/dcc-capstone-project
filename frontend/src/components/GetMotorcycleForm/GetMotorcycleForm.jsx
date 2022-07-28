@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col'
 import "./GetMotorcycleForm.css"
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import "react-datetime/css/react-datetime.css";
 
 
 
@@ -15,6 +16,12 @@ const GetMotorcycleForm = (props) => {
     const [yearInput, setYearInput] = useState();
     const [makeInput, setMakeInput] = useState();
     const [modelInput, setModelInput] = useState();
+
+
+    let inputPros = {
+        className: 'custom-input',
+        placeholder: 'Year'
+    }
 
     async function addMotorcycle(){
         
@@ -30,9 +37,13 @@ const GetMotorcycleForm = (props) => {
             },
         }).then(response =>{
             props.getMotorcycles();
+            setButtonToggled(false)
+            setMakeInput('');
+            setModelInput('')
 
         } )
     }
+    
     function handleSubmit(e){
         e.preventDefault();   
     }
@@ -51,14 +62,15 @@ const GetMotorcycleForm = (props) => {
         <button onClick={handleAdd}>ADD MOTORCYCLE</button>
         {buttonToggled && (
             <form onSubmit={handleSubmit}>
-            <Row bsPrefix="custom-row">
+            <Row bsPrefix="form-row">
                 <Col>
             <Datetime
-                value="Year"
+                
                 timeFormat={false}
                 dateFormat="YYYY"
                 onChange={(e)=> setYearInput(e.year())}
                 closeOnSelect={true}
+                inputProps={inputPros}
                 
             />
             </Col>
@@ -68,6 +80,7 @@ const GetMotorcycleForm = (props) => {
             value={makeInput}
             placeholder="Make"
             onChange={(e) => setMakeInput(e.target.value)}
+            className="custom-input"
             />
             </Col>
             <Col>
@@ -76,9 +89,10 @@ const GetMotorcycleForm = (props) => {
             value={modelInput}
             placeholder="Model"
             onChange={(e) => setModelInput(e.target.value)}
+            className="custom-input"
             />
             </Col>
-           <Col><button type="submit" onClick={handleClick}>SAVE</button></Col>
+           <Col><button type="submit" className="save-button" onClick={handleClick}>SAVE</button></Col>
             </Row>
 
 

@@ -6,6 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import Carousel from "react-multi-carousel";
+import "./GetHotels.css"
 
 
 
@@ -125,10 +126,10 @@ const GetHotels = (props) => {
 
 
     return ( 
-        <>
-        <button onClick={handleHotelTogle}>HOTELS</button>
+        <Row bsPrefix="hotels">
+        <button className="hotel-button" onClick={handleHotelTogle}>HOTELS</button>
         {hotelTogle=== true &&(
-            <Carousel responsive={responsive}>
+            <Carousel responsive={responsive} shouldResetAutoplay={false} infinite={true}>
             {hotelData.map((hotel)=>{
                 return(
                    
@@ -149,7 +150,7 @@ const GetHotels = (props) => {
 </Carousel>
            )
         }
-        </>
+        </Row>
         
      );
 }

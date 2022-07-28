@@ -1,0 +1,43 @@
+.create-trip{
+    background: transparent;
+    border: 2px solid #f65151;
+    color: white;
+    padding: 0.4rem 0.5rem;
+}
+.create-trip:hover{
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
+}
+.trip-input{
+    border-width: 0px;
+    border-bottom-width: 3px;
+    border-color: #fef4f4;
+    background: none;
+    color: #fef4f4;
+    
+}
+.trip-input:focus{
+    outline: none;
+}
+.trip-input::placeholder{
+    color: #fef4f4;
+}
+.trip-button{
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    margin: 5px;
+    padding: 5px;
+}
+.trip-button:hover{
+    background: #fef4f4;
+  color: #f65151;
+  cursor: pointer;
+
+}
+.trip-button-row{
+    display: flex;
+    justify-content: center;
+    flex-direction: row; 
+}

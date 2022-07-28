@@ -1,5 +1,5 @@
 import { Component, useEffect, useState } from "react";
-import { GoogleMap, LoadScript, DirectionsService } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, DirectionsService, InfoBox } from "@react-google-maps/api";
 import useAuth from "../../hooks/useAuth";
 import { googleMapsApiKey } from "../../localkey";
 import { DirectionsRenderer } from '@react-google-maps/api';
@@ -8,6 +8,8 @@ import TripDetails from "../TripDetails/TripDetails";
 import { useSearchParams } from 'react-router-dom';
 import axios from "axios";
 import StopDetails from "../StopDetails/StopDetails";
+import './MapDirections.css'
+import CachedIcon from '@mui/icons-material/Cached';
 
 const MapDirections = (props) => {
 
@@ -25,7 +27,8 @@ const MapDirections = (props) => {
     const [callbackRun, setCallbackRun] = useState(false)
     const [getStopsRun, setGetStopsRun] = useState(0)
     const [selectedRoute, setSelectedRoute] = useState('route');
-    let test = []
+    const [routeTabs, setRouteTabs] = useState('test')
+   
     
     useEffect(()=>{
         getStops();   
@@ -100,16 +103,10 @@ const MapDirections = (props) => {
 
 
     return ( 
-        <div>
-            
-           
-            
-
-            
         <LoadScript
         googleMapsApiKey={googleMapsApiKey}
         libraries={library}>
-            <Row>
+            <Row bsPrefix="map-row">
                 <Col>
             <GoogleMap
             id="directions-map"
@@ -142,18 +139,19 @@ const MapDirections = (props) => {
             </GoogleMap>
             </Col>
             <Col>
-            <button onClick={refresh}>refresh</button>
+            <button className="refresh" onClick={refresh}><CachedIcon/></button>
             </Col>
             </Row>
-            <Row>
-                <button onClick={()=>setSelectedRoute('route')}>TRIP</button>
+            <div>
+            <Row bsPrefix="route-tabs">
+                <button className="route-tab-button" onClick={()=>setSelectedRoute('route')}>TRIP</button>
                 {stops !== undefined &&
                 <>
                 {stops.map((stop,i,length)=>{
                     return(
                         <>
                         {i>0 &&
-                        <button onClick={()=>{handleSetStop(i)}}>day {i}</button>}
+                        <button className="route-tab-button"  onClick={()=>{handleSetStop(i)}}>Stop {i}</button>}
                         </>)
                 })}
                 </>
@@ -163,7 +161,7 @@ const MapDirections = (props) => {
                 
 
             </Row>
-
+                <div className="route-details">
                 {selectedRoute === 'route'?(
                     <>
                     {stops !== undefined &&
@@ -174,19 +172,12 @@ const MapDirections = (props) => {
                     </>
                 }
                     </>
-
                 ):(
                     <StopDetails stops={stopDetails} state={state} setState={setState} setCallbackRun={setCallbackRun}/>
-
                 )}
-                    
-                    
-    
-
+                </div>
+                </div>
         </LoadScript>
-        </div>
-        
-
     );
 }
  

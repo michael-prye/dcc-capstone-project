@@ -1,0 +1,25 @@
+.item-input{
+    border-width: 0px;
+    border-bottom-width: 3px;
+    border-color: #fef4f4;
+    background: none;
+    color: #fef4f4;
+    margin-right: 5px;
+}
+.item-input:focus{
+    outline: none;
+}
+.item-button{
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+.item-button:hover{
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
+
+}
+.item-list{
+    display: flex;
+}
