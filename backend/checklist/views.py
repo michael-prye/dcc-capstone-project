@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 @api_view(['GET', 'POST','PUT','DELETE'])
 @permission_classes([IsAuthenticated])
 def get_checklists(request):
-    trip_id = request.query_params.get('trip')
+    trip_id = request.query_params.get('t')
     list= request.query_params.get('list')
     
     if request.method == "GET":

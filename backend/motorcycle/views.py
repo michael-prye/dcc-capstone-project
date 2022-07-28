@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 def get_motorcycle(request):
     motorcycle_id = request.query_params.get('id')
     if request.method == "GET":
-        query_set = Motorcycle.objects.all()
+        query_set = Motorcycle.objects.filter(user=request.user.id)
         serializer = MotorcycleSerializer(query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':

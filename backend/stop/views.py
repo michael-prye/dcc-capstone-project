@@ -1,3 +1,4 @@
+from multiprocessing import context
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -19,21 +20,24 @@ def get_stop(request):
         serializer = StopSerializer(query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == 'POST':
-        # stop = {
-        #     "lat": request.data['lat'],
-        #     "day": request.data['day'],
-        #     "lng": request.data['lng'],
-        #     "trip_id": trip_id,
-        #     "address": request.data['address'],
-        #     "start": request.data['start'],
-        #     "end": request.data['end'],
-        # }   
+        data_len = len(request.data)
+        if data_len == 1:
+            serializer = StopSerializer(data=request.data,many=True, )
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            stops = request.data
+            stops[0]['trip_id'] = trip_id
+            stops[1]['trip_id'] = trip_id
+            serializer = StopSerializer(data=stops,many=True, )
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        serializer = StopSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
     if request.method == 'PUT':
         query_set = get_object_or_404(Stop, id =stop_id)
         serializer = StopSerializer(query_set, data=request.data,partial=True)
