@@ -25,23 +25,28 @@ const Navbar = (props) => {
   return (
 
     <div className="navBar">
-      <Container>
-        <Row bsPrefix="custom-row">
-         
-          <Col>
-            <Link className="brand" to="/" style={{ textDecoration: "none", color: "white" }}>
-            <b>Motorcycle Trip Planner</b>
-            </Link>
-          </Col>
-          <Col>
-          <h></h>
-            <button onClick={logoutUser}>Logout</button>
-          </Col>
-          <Col>
-            <button onClick={()=>navigate("/profile")}>Profile</button>
-          </Col>
-        </Row>
-      </Container>
+      {user
+      ?<Container>
+      <Row bsPrefix="custom-row">
+       
+        <Col>
+          <Link className="brand" to="/" style={{ textDecoration: "none", color: "white" }}>
+          <b>Motorcycle Trip Planner</b>
+          </Link>
+        </Col>
+        <Col>
+        <h></h>
+          <button onClick={logoutUser}>Logout</button>
+        </Col>
+        <Col>
+          <button onClick={()=>navigate("/profile")}>Profile</button>
+        </Col>
+      </Row>
+    </Container>
+    : <h2><b>Motorcycle Trip Planner</b></h2>}
+
+      
+      
     </div>
   );
 };
