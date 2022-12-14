@@ -1,16 +1,20 @@
 .add-input{
     border-width: 0px;
     border-bottom-width: 3px;
-    border-color: black;
+    border-color: #fef4f4;
     background: none;
+    color: #fef4f4;
 }
 .add-input:focus{
     outline: none;
 }
 .add-button{
-    border-width: 0px;
-    background: none;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
 }
 .add-button:hover{
-    border-bottom-width: 2px;
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
 }

@@ -5,17 +5,32 @@
 .custom-input{
     border-width: 0px;
     border-bottom-width: 3px;
-    border-color: black;
+    border-color: #fef4f4;
     background: none;
+    color: #fef4f4;
     margin-right: 10px;
 }
 .custom-input:focus{
     outline: none;
 }
 .save-button{
-    border-style: none;
-    background: none;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
 }
 .save-button:hover{
-    border-bottom-style: solid;
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
+}
+
+.add-button{
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+.add-button:hover{
+    background: #fef4f4;
+    color: #f65151;
+    cursor: pointer;
 }

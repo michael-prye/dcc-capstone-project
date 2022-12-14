@@ -59,7 +59,7 @@ const GetMotorcycleForm = (props) => {
 
     return (
         <Container fluid>
-        <button onClick={handleAdd}>ADD MOTORCYCLE</button>
+        <button className="add-button" onClick={handleAdd}>ADD MOTORCYCLE</button>
         {buttonToggled && (
             <form onSubmit={handleSubmit}>
             <Row bsPrefix="form-row">

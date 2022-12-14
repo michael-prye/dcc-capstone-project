@@ -2,4 +2,9 @@
     display: flex;
     justify-content: space-between;
 }
-
+.moto-carousel{
+    color: #fef4f4;
+}
+.delete-button{
+    color: #fef4f4;
+}
