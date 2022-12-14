@@ -74,24 +74,7 @@ const GetMotorcycleForm = (props) => {
                 
             />
             </Col>
-            <Col>
-            <input
-            type="text"
-            value={makeInput}
-            placeholder="Make"
-            onChange={(e) => setMakeInput(e.target.value)}
-            className="custom-input"
-            />
-            </Col>
-            <Col>
-            <input
-            type="text"
-            value={modelInput}
-            placeholder="Model"
-            onChange={(e) => setModelInput(e.target.value)}
-            className="custom-input"
-            />
-            </Col>
+
            <Col><button type="submit" className="save-button" onClick={handleClick}>SAVE</button></Col>
             </Row>
 
